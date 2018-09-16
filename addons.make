@@ -1,0 +1,5 @@
+ofxGuiExtended
+ofxNetwork
+ofxOpenCv
+ofxOsc
+ofxRSSDK

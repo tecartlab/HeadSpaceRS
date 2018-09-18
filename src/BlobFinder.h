@@ -21,6 +21,7 @@
 #include <cmath>
 
 #define N_MAX_BLOBS 20
+#define SCALE 0.001
 
 class BlobFinder {
     

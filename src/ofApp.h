@@ -18,12 +18,12 @@
 
 #define N_CAMERAS 6
 
-#define VIEWGRID_WIDTH  105
-#define MENU_WIDTH      600
+#define VIEWGRID_WIDTH  132
+#define MENU_WIDTH      1000
 #define VIEWPORT_HEIGHT 480
 
-#define KINECT_IMG_WIDTH   640
-#define KINECT_IMG_HEIGHT  480
+#define REALSENSE_DEPTH_WIDTH   848
+#define REALSENSE_DEPTH_HEIGHT  480
 
 #define N_MEASURMENT_CYCLES 10
 
@@ -177,8 +177,9 @@ class ofApp : public ofBaseApp{
     ofxGui gui;
     
     ofxGuiPanel *setupCalib;
-    //ofxGuiPanel *deviceCalib;
-    
+	ofxGuiPanel *device;
+	ofxGuiPanel *post;
+
     ofParameter<ofVec2f> calibPoint1;
     ofParameter<ofVec2f> calibPoint2;
     ofParameter<ofVec2f> calibPoint3;

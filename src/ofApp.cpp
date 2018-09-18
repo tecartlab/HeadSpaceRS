@@ -38,14 +38,32 @@ void ofApp::setup(){
     
     blobFinder.allocate();
 
-    ////////////////
-    //GUI   SETUP //
-    ////////////////
+	post = gui.addPanel();
+	post->loadTheme("theme/theme_light.json");
+	post->setName("PostProcessing");
+	post->add(realSense->param_usePostProcessing);
+	post->add(realSense->param_filterDecimation);
+	post->add(realSense->param_filterDecimation_mag);
+	post->add(realSense->param_filterDisparities);
+	post->add(realSense->param_filterSpatial);
+	post->add(realSense->param_filterSpatial_smoothAlpha);
+	post->add(realSense->param_filterSpatial_smoothDelta);
+	post->add(realSense->param_filterSpatial_mag);
+	post->add(realSense->param_filterTemporal);
+	post->add(realSense->param_filterTemporal_smoothAlpha);
+	post->add(realSense->param_filterTemporal_smoothDelta);
+	post->add(realSense->param_filterTemporal_persistency);
+
+	post->loadFromFile("postprocessing.xml");
+
+    /////////////////////////////
+    //CALIBRATION GUI   SETUP //
+    ////////////////////////////
     
     setupCalib = gui.addPanel();
     
     setupCalib->loadTheme("theme/theme_light.json");
-    setupCalib->setName("Kinect Panel");
+    setupCalib->setName("Calibration Panel");
     
     setupCalib->add(captureVideo.set("use video", true));
     setupCalib->add(blobGrain.set("Grain", 2, 1, 4));
@@ -67,7 +85,7 @@ void ofApp::setup(){
     setupCalib->loadFromFile("settings.xml");
 
     ////////////////////
-    //KINECT          // -> It needs to be after the GUI SETUP but before GUI DEVICE
+    //RealSense       // -> It needs to be after the GUI SETUP but before GUI DEVICE
     ////////////////////
     
 	realSense->start();
@@ -77,22 +95,22 @@ void ofApp::setup(){
     ////////////////
     //GUI   DEVICE //
     ////////////////
+
+	device = gui.addPanel();
+    
+	device->loadTheme("theme/theme_light.json");
+	device->setName("RealSense Device");
+	device->add<ofxGuiLabel>(kinectSerialID);
+
 	/*
-	deviceCalib = gui.addPanel();
-    
-    deviceCalib->loadTheme("theme/theme_light.json");
-    deviceCalib->setName("Kinect Device");
-    deviceCalib->add<ofxGuiLabel>(kinectSerialID);
+    intrinsicGuiGroup.setName("Settings");
+	intrinsicGuiGroup.add(realSense->param_deviceLaser);
+	intrinsicGuiGroup.add(realSense->param_deviceLaser_mag);
 
-    intrinsicGuiGroup.setName("Corrections");
-    intrinsicGuiGroup.add(depthCorrectionBase.set("base", 1.0, 0.9, 1.1));
-    intrinsicGuiGroup.add(depthCorrectionDivisor.set("divisor", 100000, 90000, 110000));
-    intrinsicGuiGroup.add(pixelSizeCorrector.set("pixl factor", 1.0, 0.9, 1.1));
-    
-	//deviceCalib->addGroup(intrinsicGuiGroup);
-
-    //deviceCalib->loadFromFile(kinectSerialID + ".xml");
+	device->addGroup(intrinsicGuiGroup);
 	*/
+
+    device->loadFromFile(kinectSerialID + ".xml");
 
     updateMatrix();
 
@@ -134,10 +152,17 @@ void ofApp::setup(){
 void ofApp::setupViewports(){
 	//call here whenever we resize the window
  
-    setupCalib->setPosition(ofGetWidth() - MENU_WIDTH, 20);
-    //deviceCalib->setPosition(ofGetWidth() - MENU_WIDTH/3, 20);
-    networkMng.panel->setPosition(ofGetWidth() - MENU_WIDTH/3, 200);
-    blobFinder.panel->setPosition(ofGetWidth() - MENU_WIDTH/3*2, 20);
+	device->setWidth(MENU_WIDTH / 4);
+	post->setWidth(MENU_WIDTH / 4);
+	setupCalib->setWidth(MENU_WIDTH / 4);
+	blobFinder.panel->setWidth(MENU_WIDTH / 4);
+	networkMng.panel->setWidth(MENU_WIDTH / 4);
+
+	device->setPosition(ofGetWidth() - MENU_WIDTH, 20);
+	post->setPosition(ofGetWidth() - MENU_WIDTH, 200);
+	setupCalib->setPosition(ofGetWidth() - MENU_WIDTH / 4 * 3, 20);
+	blobFinder.panel->setPosition(ofGetWidth() - MENU_WIDTH / 4 * 2, 20);
+	networkMng.panel->setPosition(ofGetWidth() - MENU_WIDTH / 4, 20);
     //ofLog(OF_LOG_NOTICE, "ofGetWidth()" + ofToString(ofGetWidth()));
 
 	//--
@@ -463,7 +488,7 @@ void ofApp::draw(){
     if(bShowVisuals){
         //Draw viewport previews
 		realSense->drawDepthStream(viewGrid[0]);
-		realSense->drawVideoStream(viewGrid[1]);
+		realSense->drawInfraLeftStream(viewGrid[1]);
 
         //blobFinder.captureFBO.draw(viewGrid[2]);
         //blobFinder.contourFinder.draw(viewGrid[3]);
@@ -476,7 +501,7 @@ void ofApp::draw(){
                 drawCalibrationPoints();
                 break;
             case 1:
-				realSense->drawVideoStream(viewMain);
+				realSense->drawInfraLeftStream(viewMain);
                 drawCalibrationPoints();
                 break;
             case 2:
@@ -500,7 +525,7 @@ void ofApp::draw(){
                 break;
             case 5:
                 previewCam.begin(viewMain);
-                mainGrid.drawPlane(50., 5, false);
+                mainGrid.drawPlane(5., 5, false);
                 drawPreview();
                 previewCam.end();
                 break;
@@ -511,7 +536,7 @@ void ofApp::draw(){
         //Draw opengl viewport previews (ofImages dont like opengl calls before they are drawn
         if(iMainCamera != 5){ // make sure the camera is drawn only once (so the interaction with the mouse works)
             previewCam.begin(viewGrid[5]);
-            mainGrid.drawPlane(50., 5, false);
+            mainGrid.drawPlane(5., 5, false);
             drawPreview();
             previewCam.end();
         }
@@ -615,11 +640,14 @@ void ofApp::drawPreview() {
 	glPointSize(4);
 	ofPushMatrix();
 
-	ofScale(0.01, 0.01, 0.01);
     //This moves the crossingpoint of the kinect center line and the plane to the center of the stage
     ofTranslate(-planeCenterPoint.x, -planeCenterPoint.y, 0);
-	if (bPreviewPointCloud)
+	if (bPreviewPointCloud) {
 		realSense->draw();
+	}
+	ofPopMatrix();
+
+	ofPushMatrix();
 
     ofSetColor(255, 255, 0);
     blobFinder.sensorBox.draw();
@@ -642,13 +670,14 @@ void ofApp::drawPreview() {
     ofMultMatrix(kinectRransform);
 
     ofFill();
-
+	/*
     ofSetColor(255, 0, 0);
     sphere1.draw();
     sphere2.draw();
     sphere3.draw();
     frustumCenterSphere.draw();
-    
+	*/
+
     geometry.draw();
 
     ofSetColor(0, 0, 255);
@@ -675,12 +704,12 @@ void ofApp::drawCalibrationPoints(){
     ofPushStyle();
     ofSetColor(255, 0, 0);
     ofNoFill();
-    ofDrawBitmapString("a", calibPoint1.get().x/KINECT_IMG_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint1.get().y -5);
-    ofDrawBitmapString("b", calibPoint2.get().x/KINECT_IMG_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint2.get().y -5);
-    ofDrawBitmapString("c", calibPoint3.get().x/KINECT_IMG_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint3.get().y -5);
-    ofDrawCircle(calibPoint1.get().x/KINECT_IMG_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint1.get().y, 2);
-    ofDrawCircle(calibPoint2.get().x/KINECT_IMG_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint2.get().y, 2);
-    ofDrawCircle(calibPoint3.get().x/KINECT_IMG_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint3.get().y, 2);
+    ofDrawBitmapString("a", calibPoint1.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint1.get().y -5);
+    ofDrawBitmapString("b", calibPoint2.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint2.get().y -5);
+    ofDrawBitmapString("c", calibPoint3.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint3.get().y -5);
+    ofDrawCircle(calibPoint1.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint1.get().y, 2);
+    ofDrawCircle(calibPoint2.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint2.get().y, 2);
+    ofDrawCircle(calibPoint3.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint3.get().y, 2);
     ofPopStyle();
     glEnable(GL_DEPTH_TEST);
 }
@@ -750,8 +779,9 @@ void ofApp::keyPressed(int key){
         case 's':
             setupCalib->saveToFile("settings.xml");
             blobFinder.panel->saveToFile("trackings.xml");
-            networkMng.panel->saveToFile("broadcast.xml");
-            //deviceCalib->saveToFile(kinectSerialID + ".xml");
+			networkMng.panel->saveToFile("broadcast.xml");
+			post->saveToFile("postprocessing.xml");
+			//device->saveToFile(kinectSerialID + ".xml");
             break;
 
         case 'l':
@@ -858,22 +888,22 @@ void ofApp::mouseDragged(int x, int y, int button){
 void ofApp::mousePressed(int x, int y, int button){
     if(iMainCamera == 0 || iMainCamera == 1) {
         if(ofGetKeyPressed('a')){
-            int posX = (x - VIEWGRID_WIDTH) / viewMain.width * KINECT_IMG_WIDTH;
+            int posX = (x - VIEWGRID_WIDTH) / viewMain.width * REALSENSE_DEPTH_WIDTH;
             int posY = y;
-            if(0 <= posX && posX < KINECT_IMG_WIDTH &&
-               0 <= posY && posY < KINECT_IMG_HEIGHT)
+            if(0 <= posX && posX < REALSENSE_DEPTH_WIDTH &&
+               0 <= posY && posY < REALSENSE_DEPTH_HEIGHT)
                 calibPoint1.set(glm::vec2(posX, posY));
         }else if(ofGetKeyPressed('b')){
-            int posX = (x - VIEWGRID_WIDTH) / viewMain.width * KINECT_IMG_WIDTH;
+            int posX = (x - VIEWGRID_WIDTH) / viewMain.width * REALSENSE_DEPTH_WIDTH;
             int posY = y;
-            if(0 <= posX && posX < KINECT_IMG_WIDTH &&
-               0 <= posY && posY < KINECT_IMG_HEIGHT)
+            if(0 <= posX && posX < REALSENSE_DEPTH_WIDTH &&
+               0 <= posY && posY < REALSENSE_DEPTH_HEIGHT)
                 calibPoint2.set(glm::vec2(posX, posY));
         }else if(ofGetKeyPressed('c')){
-            int posX = (x - VIEWGRID_WIDTH) / viewMain.width * KINECT_IMG_WIDTH;
+            int posX = (x - VIEWGRID_WIDTH) / viewMain.width * REALSENSE_DEPTH_WIDTH;
             int posY = y;
-            if(0 <= posX && posX < KINECT_IMG_WIDTH &&
-               0 <= posY && posY < KINECT_IMG_HEIGHT)
+            if(0 <= posX && posX < REALSENSE_DEPTH_WIDTH &&
+               0 <= posY && posY < REALSENSE_DEPTH_HEIGHT)
                 calibPoint3.set(glm::vec2(posX, posY));
         }
     }

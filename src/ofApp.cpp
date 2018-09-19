@@ -102,13 +102,17 @@ void ofApp::setup(){
 	device->setName("RealSense Device");
 	device->add<ofxGuiLabel>(kinectSerialID);
 
-	/*
     intrinsicGuiGroup.setName("Settings");
 	intrinsicGuiGroup.add(realSense->param_deviceLaser);
 	intrinsicGuiGroup.add(realSense->param_deviceLaser_mag);
+	intrinsicGuiGroup.add(realSense->param_deviceAutoExposure);
+	intrinsicGuiGroup.add(realSense->param_deviceExposure_mag);
+	intrinsicGuiGroup.add(realSense->param_deviceGain_mag);
+	intrinsicGuiGroup.add(realSense->param_deviceFrameQueSize_mag);
+	intrinsicGuiGroup.add(realSense->param_deviceAsicTemparature);
+	intrinsicGuiGroup.add(realSense->param_deviceProjectorTemparature);
 
 	device->addGroup(intrinsicGuiGroup);
-	*/
 
     device->loadFromFile(kinectSerialID + ".xml");
 
@@ -159,7 +163,7 @@ void ofApp::setupViewports(){
 	networkMng.panel->setWidth(MENU_WIDTH / 4);
 
 	device->setPosition(ofGetWidth() - MENU_WIDTH, 20);
-	post->setPosition(ofGetWidth() - MENU_WIDTH, 200);
+	post->setPosition(ofGetWidth() - MENU_WIDTH, 400);
 	setupCalib->setPosition(ofGetWidth() - MENU_WIDTH / 4 * 3, 20);
 	blobFinder.panel->setPosition(ofGetWidth() - MENU_WIDTH / 4 * 2, 20);
 	networkMng.panel->setPosition(ofGetWidth() - MENU_WIDTH / 4, 20);

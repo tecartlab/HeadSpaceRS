@@ -25,6 +25,9 @@
 #define REALSENSE_DEPTH_WIDTH   848
 #define REALSENSE_DEPTH_HEIGHT  480
 
+#define REALSENSE_VIDEO_WIDTH   848
+#define REALSENSE_VIDEO_HEIGHT  480
+
 #define N_MEASURMENT_CYCLES 10
 
 using namespace std;
@@ -150,15 +153,15 @@ class ofApp : public ofBaseApp{
     ofVec3f planePoint2Meas[N_MEASURMENT_CYCLES];
     ofVec3f planePoint3Meas[N_MEASURMENT_CYCLES];
     
-    ofVec3f planePoint1;
-    ofVec3f planePoint2;
-    ofVec3f planePoint3;
+    ofVec3f planePoint_X;
+    ofVec3f planePoint_Y;
+    ofVec3f planePoint_Z;
 
     ofVec3f planeCenterPoint;
 
-    ofSpherePrimitive sphere1;
-    ofSpherePrimitive sphere2;
-    ofSpherePrimitive sphere3;
+    ofSpherePrimitive sphere_X;
+    ofSpherePrimitive sphere_Y;
+    ofSpherePrimitive sphere_Z;
     
     ofSpherePrimitive frustumCenterSphere;
     ofSpherePrimitive frustumTopSphere;
@@ -180,9 +183,9 @@ class ofApp : public ofBaseApp{
 	ofxGuiPanel *device;
 	ofxGuiPanel *post;
 
-    ofParameter<ofVec2f> calibPoint1;
-    ofParameter<ofVec2f> calibPoint2;
-    ofParameter<ofVec2f> calibPoint3;
+    ofParameter<ofVec2f> calibPoint_X;
+    ofParameter<ofVec2f> calibPoint_Y;
+    ofParameter<ofVec2f> calibPoint_Z;
     
     ofParameter<ofVec3f> transformation;
     

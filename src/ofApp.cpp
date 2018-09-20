@@ -14,6 +14,8 @@ void ofApp::setup(){
 
 	realSense->checkConnectedDialog();
 
+	realSense->setVideoSize(REALSENSE_VIDEO_WIDTH, REALSENSE_VIDEO_HEIGHT);
+
 	// we don't want to be running to fast
 	//ofSetVerticalSync(true);
 	//ofSetFrameRate(30);
@@ -68,16 +70,16 @@ void ofApp::setup(){
     setupCalib->add(captureVideo.set("use video", true));
     setupCalib->add(blobGrain.set("Grain", 2, 1, 4));
 
-    setupCalib->add(calibPoint1.set("calibA", ofVec2f(320, 240), ofVec2f(0, 0), ofVec2f(640, 480)));
-    setupCalib->add(calibPoint2.set("calibB", ofVec2f(320, 240), ofVec2f(0, 0), ofVec2f(640, 480)));
-    setupCalib->add(calibPoint3.set("calibC", ofVec2f(320, 240), ofVec2f(0, 0), ofVec2f(640, 480)));
+    setupCalib->add(calibPoint_X.set("calibrationPoint_X", ofVec2f(REALSENSE_VIDEO_WIDTH / 2, REALSENSE_VIDEO_HEIGHT / 2), ofVec2f(0, 0), ofVec2f(REALSENSE_VIDEO_WIDTH, REALSENSE_VIDEO_HEIGHT)));
+    setupCalib->add(calibPoint_Y.set("calibrationPoint_Y", ofVec2f(REALSENSE_VIDEO_WIDTH / 2, REALSENSE_VIDEO_HEIGHT / 2), ofVec2f(0, 0), ofVec2f(REALSENSE_VIDEO_WIDTH, REALSENSE_VIDEO_HEIGHT)));
+    setupCalib->add(calibPoint_Z.set("calibrationPoint_Z", ofVec2f(REALSENSE_VIDEO_WIDTH / 2, REALSENSE_VIDEO_HEIGHT / 2), ofVec2f(0, 0), ofVec2f(REALSENSE_VIDEO_WIDTH, REALSENSE_VIDEO_HEIGHT)));
     
     nearFrustum.addListener(this, &ofApp::updateFrustumCone);
     farFrustum.addListener(this, &ofApp::updateFrustumCone);
 
     frustumGuiGroup.setName("frustumField");
     frustumGuiGroup.add(nearFrustum.set("nearFrustum", 400, 200, 2000));
-    frustumGuiGroup.add(farFrustum.set("farFrustum", 4000, 2000, 6000));
+    frustumGuiGroup.add(farFrustum.set("farFrustum", 4000, 2000, 10000));
     setupCalib->addGroup(frustumGuiGroup);
     
     //setupCalib->add(transformation.set("matrix rx ry tz", ofVec3f(0, 0, 0), ofVec3f(-90, -90, -6000), ofVec3f(90, 90, 6000)));
@@ -223,22 +225,22 @@ void ofApp::updateFrustumCone(int & value){
 
 void ofApp::measurementCycleRaw(){
     if(cycleCounter < N_MEASURMENT_CYCLES){
-        planePoint1Meas[cycleCounter] = calcPlanePoint(calibPoint1, 0, 1);
-        planePoint2Meas[cycleCounter] = calcPlanePoint(calibPoint2, 0, 1);
-        planePoint3Meas[cycleCounter] = calcPlanePoint(calibPoint3, 0, 1);
+        planePoint1Meas[cycleCounter] = calcPlanePoint(calibPoint_X, 0, 1);
+        planePoint2Meas[cycleCounter] = calcPlanePoint(calibPoint_Y, 0, 1);
+        planePoint3Meas[cycleCounter] = calcPlanePoint(calibPoint_Z, 0, 1);
         cycleCounter++;
     } else {
-        planePoint1 = ofVec3f();
-        planePoint2 = ofVec3f();
-        planePoint3 = ofVec3f();
+        planePoint_X = ofVec3f();
+        planePoint_Y = ofVec3f();
+        planePoint_Z = ofVec3f();
         for(int y = 0; y < N_MEASURMENT_CYCLES; y++){
-            planePoint1 += planePoint1Meas[y];
-            planePoint2 += planePoint2Meas[y];
-            planePoint3 += planePoint3Meas[y];
+            planePoint_X += planePoint1Meas[y];
+            planePoint_Y += planePoint2Meas[y];
+            planePoint_Z += planePoint3Meas[y];
         }
-        planePoint1 /= N_MEASURMENT_CYCLES;
-        planePoint2 /= N_MEASURMENT_CYCLES;
-        planePoint3 /= N_MEASURMENT_CYCLES;
+        planePoint_X /= N_MEASURMENT_CYCLES;
+        planePoint_Y /= N_MEASURMENT_CYCLES;
+        planePoint_Z /= N_MEASURMENT_CYCLES;
         bUpdateMeasurment = false;
         bUpdateMeasurmentFine = true;
         cycleCounter = 0;
@@ -247,32 +249,32 @@ void ofApp::measurementCycleRaw(){
 
 void ofApp::measurementCycleFine(){
     if(cycleCounter < N_MEASURMENT_CYCLES){
-        ofVec3f p1meas = calcPlanePoint(calibPoint1, 0, 1);
-        ofVec3f p2meas = calcPlanePoint(calibPoint2, 0, 1);
-        ofVec3f p3meas = calcPlanePoint(calibPoint3, 0, 1);
-        if(planePoint1.z / 1.05 < p1meas.z &&
-           p1meas.z < planePoint1.z * 1.05 &&
-           planePoint2.z / 1.05 < p2meas.z &&
-           p2meas.z < planePoint2.z * 1.05 &&
-           planePoint3.z / 1.05 < p3meas.z &&
-           p3meas.z < planePoint3.z * 1.05){
+        ofVec3f p1meas = calcPlanePoint(calibPoint_X, 0, 1);
+        ofVec3f p2meas = calcPlanePoint(calibPoint_Y, 0, 1);
+        ofVec3f p3meas = calcPlanePoint(calibPoint_Z, 0, 1);
+        if(planePoint_X.z / 1.05 < p1meas.z &&
+           p1meas.z < planePoint_X.z * 1.05 &&
+           planePoint_Y.z / 1.05 < p2meas.z &&
+           p2meas.z < planePoint_Y.z * 1.05 &&
+           planePoint_Z.z / 1.05 < p3meas.z &&
+           p3meas.z < planePoint_Z.z * 1.05){
             planePoint1Meas[cycleCounter] = p1meas;
             planePoint2Meas[cycleCounter] = p2meas;
             planePoint3Meas[cycleCounter] = p3meas;
             cycleCounter++;
         }
     } else {
-        planePoint1 = ofVec3f();
-        planePoint2 = ofVec3f();
-        planePoint3 = ofVec3f();
+        planePoint_X = ofVec3f();
+        planePoint_Y = ofVec3f();
+        planePoint_Z = ofVec3f();
         for(int y = 0; y < N_MEASURMENT_CYCLES; y++){
-            planePoint1 += planePoint1Meas[y];
-            planePoint2 += planePoint2Meas[y];
-            planePoint3 += planePoint3Meas[y];
+            planePoint_X += planePoint1Meas[y];
+            planePoint_Y += planePoint2Meas[y];
+            planePoint_Z += planePoint3Meas[y];
         }
-        planePoint1 /= N_MEASURMENT_CYCLES;
-        planePoint2 /= N_MEASURMENT_CYCLES;
-        planePoint3 /= N_MEASURMENT_CYCLES;
+        planePoint_X /= N_MEASURMENT_CYCLES;
+        planePoint_Y /= N_MEASURMENT_CYCLES;
+        planePoint_Z /= N_MEASURMENT_CYCLES;
         bUpdateMeasurmentFine = false;
         cycleCounter = 0;
         updateCalc();
@@ -282,18 +284,18 @@ void ofApp::measurementCycleFine(){
 //--------------------------------------------------------------
 void ofApp::updateCalc(){
         
-    sphere1.setPosition(planePoint1);
-    sphere2.setPosition(planePoint2);
-    sphere3.setPosition(planePoint3);
+    sphere_X.setPosition(planePoint_X);
+    sphere_Y.setPosition(planePoint_Y);
+    sphere_Z.setPosition(planePoint_Z);
 
-    sphere1.setRadius(25);
-    sphere2.setRadius(25);
-    sphere3.setRadius(25);
+    sphere_X.setRadius(25);
+    sphere_Y.setRadius(25);
+    sphere_Z.setRadius(25);
 
     
-    Planef REL_floorPlane = Planef(planePoint1, planePoint2, planePoint3);
+    Planef REL_floorPlane = Planef(planePoint_X, planePoint_Y, planePoint_Z);
     if(REL_floorPlane.getNormal().z < 0.f){ // if it points downwards
-        REL_floorPlane = Planef(planePoint3, planePoint2, planePoint1);
+        REL_floorPlane = Planef(planePoint_Z, planePoint_Y, planePoint_X);
     }
     
     Linef KINECT_Z_axis = Linef(ofVec3f(0, 0, 0), ofVec3f(0, 0, -1));
@@ -371,11 +373,15 @@ void ofApp::updateCalc(){
     geometry.addVertex(ABS_frustumCenterPoint + ofVec3f(HELPER_Z_Axis).scale(1000));
     
     calcdata = string("distance to plane center point: " + ofToString(ABS_frustumCenterPoint.length()) + "\n");
-    calcdata += "distance to A: " + ofToString(planePoint1.length()) + "\n";
-    calcdata += "distance to B: " + ofToString(planePoint2.length()) + "\n";
-    calcdata += "distance to C: " + ofToString(planePoint3.length()) + "\n";
-    calcdata += "distance A to B: " + ofToString(ofVec3f(planePoint1 - planePoint2).length()) + "\n";
- 
+	calcdata += "position point X: " + ofToString(planePoint_X) + "\n";
+	calcdata += "position point Y: " + ofToString(planePoint_Y) + "\n";
+	calcdata += "position point Z: " + ofToString(planePoint_Z) + "\n";
+	calcdata += "distance to X: " + ofToString(planePoint_X.length()) + "\n";
+	calcdata += "distance to Y: " + ofToString(planePoint_Y.length()) + "\n";
+    calcdata += "distance to Z: " + ofToString(planePoint_Z.length()) + "\n";
+	calcdata += "distance X to Z: " + ofToString(ofVec3f(planePoint_X - planePoint_Z).length()) + "\n";
+	calcdata += "distance Y to Z: " + ofToString(ofVec3f(planePoint_Y - planePoint_Z).length()) + "\n";
+
 
     //ofLog(OF_LOG_NOTICE, "planeCenterPoint.x" + ofToString(planeCenterPoint.x));
     //ofLog(OF_LOG_NOTICE, "planeCenterPoint.y" + ofToString(planeCenterPoint.y));
@@ -406,13 +412,10 @@ void ofApp::updateMatrix(){
 //--------------------------------------------------------------
 glm::vec3 ofApp::calcPlanePoint(ofParameter<ofVec2f> & cpoint, int _size, int _step){
 	glm::vec3 ppoint;
-	/*
-    int width = kinect.getWidth();
-    int height = kinect.getHeight();
-    double ref_pix_size = 2 * kinect.getZeroPlanePixelSize() * pixelSizeCorrector.get();
-    double ref_distance = kinect.getZeroPlaneDistance();
-    ofShortPixelsRef raw = kinect.getRawDepthPixels();
-    
+
+	int width = realSense->getDepthWidth();
+    int height = realSense->getDepthHeight();
+   
     int size = _size;
     int step = _step;
     float factor;
@@ -424,20 +427,20 @@ glm::vec3 ofApp::calcPlanePoint(ofParameter<ofVec2f> & cpoint, int _size, int _s
     int maxX = ((cpoint.get().x + size) < cpoint.getMax().x)?(cpoint.get().x + size): cpoint.getMax().x - 1;
       
     float corrDistance;
+
+	glm::vec3 coord;
     
     for(int y = minY; y <= maxY; y = y + step) {
         for(int x = minX; x <= maxX; x = x + step) {
-            corrDistance = (float)raw[y * width + x] * (depthCorrectionBase.get() + (float)raw[y * width + x] / depthCorrectionDivisor.get());
-            factor = ref_pix_size * corrDistance / ref_distance;
-            if(raw[y * width + x] > 0) {
-                ppoint += ofVec3f((x - DEPTH_X_RES/2) *factor, -(y - DEPTH_Y_RES/2) *factor, -corrDistance);
+ 			coord = realSense->getSpacePointFromInfraLeftFrameCoord(glm::vec2(x, y));
+            if(coord.z > 0) {
+				ppoint += coord;
                 counter++;
             }
         }
     }
     ppoint /= counter;
-    	*/
-
+  
     return ppoint;
     
 }
@@ -451,13 +454,13 @@ void ofApp::update(){
 	// there is a new frame and we are connected
 	if(realSense->update(ofxRSSDK::PointCloud::INFRALEFT)) {
 
-		/*
         if(bUpdateMeasurment){
             measurementCycleRaw();
         }
         if(bUpdateMeasurmentFine){
             measurementCycleFine();
         }
+		/*
 		updatePointCloud(capMesh.update(), blobGrain.get(), true, false);
 		if(bPreviewPointCloud) {
 		updatePointCloud(previewmesh, blobGrain.get() + 1, false, true);
@@ -676,9 +679,9 @@ void ofApp::drawPreview() {
     ofFill();
 	/*
     ofSetColor(255, 0, 0);
-    sphere1.draw();
-    sphere2.draw();
-    sphere3.draw();
+    sphere_X.draw();
+    sphere_Y.draw();
+    sphere_Z.draw();
     frustumCenterSphere.draw();
 	*/
 
@@ -708,12 +711,12 @@ void ofApp::drawCalibrationPoints(){
     ofPushStyle();
     ofSetColor(255, 0, 0);
     ofNoFill();
-    ofDrawBitmapString("a", calibPoint1.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint1.get().y -5);
-    ofDrawBitmapString("b", calibPoint2.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint2.get().y -5);
-    ofDrawBitmapString("c", calibPoint3.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint3.get().y -5);
-    ofDrawCircle(calibPoint1.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint1.get().y, 2);
-    ofDrawCircle(calibPoint2.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint2.get().y, 2);
-    ofDrawCircle(calibPoint3.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint3.get().y, 2);
+    ofDrawBitmapString("x", calibPoint_X.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint_X.get().y -5);
+    ofDrawBitmapString("y", calibPoint_Y.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint_Y.get().y -5);
+    ofDrawBitmapString("z", calibPoint_Z.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH + 5, calibPoint_Z.get().y -5);
+    ofDrawCircle(calibPoint_X.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint_X.get().y, 2);
+    ofDrawCircle(calibPoint_Y.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint_Y.get().y, 2);
+    ofDrawCircle(calibPoint_Z.get().x/REALSENSE_DEPTH_WIDTH*viewMain.width + VIEWGRID_WIDTH, calibPoint_Z.get().y, 2);
     ofPopStyle();
     glEnable(GL_DEPTH_TEST);
 }
@@ -735,7 +738,7 @@ void ofApp::createHelp(){
 	help += "press s -> to save current settings.\n";
 	help += "press l -> to load last saved settings\n";
 	help += "press 1 - 6 -> to change the viewport\n";
-	help += "press a|b|c + mouse-release -> to change the calibration points in viewport 1\n";
+	help += "press x|y|z + mouse-release -> to change the calibration points in viewport 1\n";
     
 	help += "press t -> to terminate the connection, connection is: " + ofToString(realSense->isRunning()) + "\n";
 	help += "press o -> to open the connection again\n";
@@ -892,24 +895,24 @@ void ofApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
     if(iMainCamera == 0 || iMainCamera == 1) {
-        if(ofGetKeyPressed('a')){
+        if(ofGetKeyPressed('x')){
             int posX = (x - VIEWGRID_WIDTH) / viewMain.width * REALSENSE_DEPTH_WIDTH;
             int posY = y;
             if(0 <= posX && posX < REALSENSE_DEPTH_WIDTH &&
                0 <= posY && posY < REALSENSE_DEPTH_HEIGHT)
-                calibPoint1.set(glm::vec2(posX, posY));
-        }else if(ofGetKeyPressed('b')){
+                calibPoint_X.set(glm::vec2(posX, posY));
+        }else if(ofGetKeyPressed('y')){
             int posX = (x - VIEWGRID_WIDTH) / viewMain.width * REALSENSE_DEPTH_WIDTH;
             int posY = y;
             if(0 <= posX && posX < REALSENSE_DEPTH_WIDTH &&
                0 <= posY && posY < REALSENSE_DEPTH_HEIGHT)
-                calibPoint2.set(glm::vec2(posX, posY));
-        }else if(ofGetKeyPressed('c')){
+                calibPoint_Y.set(glm::vec2(posX, posY));
+        }else if(ofGetKeyPressed('z')){
             int posX = (x - VIEWGRID_WIDTH) / viewMain.width * REALSENSE_DEPTH_WIDTH;
             int posY = y;
             if(0 <= posX && posX < REALSENSE_DEPTH_WIDTH &&
                0 <= posY && posY < REALSENSE_DEPTH_HEIGHT)
-                calibPoint3.set(glm::vec2(posX, posY));
+                calibPoint_Z.set(glm::vec2(posX, posY));
         }
     }
 }

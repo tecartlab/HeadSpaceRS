@@ -114,7 +114,7 @@ void ofApp::setup(){
 
 	device->addGroup(intrinsicGuiGroup);
 
-    device->loadFromFile(kinectSerialID + ".xml");
+    device->loadFromFile(realSense->getSerialNumber(-1) + ".xml");
 
     updateMatrix();
 
@@ -785,14 +785,15 @@ void ofApp::keyPressed(int key){
             blobFinder.panel->saveToFile("trackings.xml");
 			networkMng.panel->saveToFile("broadcast.xml");
 			post->saveToFile("postprocessing.xml");
-			//device->saveToFile(kinectSerialID + ".xml");
+			device->saveToFile(realSense->getSerialNumber(-1) + ".xml");
             break;
 
         case 'l':
             setupCalib->loadFromFile("settings.xml");
             blobFinder.panel->loadFromFile("trackings.xml");
             networkMng.panel->loadFromFile("broadcast.xml");
-            //deviceCalib->loadFromFile(kinectSerialID + ".xml");
+			post->loadFromFile("postprocessing.xml");
+			device->loadFromFile(realSense->getSerialNumber(-1) + ".xml");
             break;
 
 		case 'm':

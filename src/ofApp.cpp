@@ -288,39 +288,40 @@ void ofApp::updateCalc(){
     sphere_Y.setPosition(planePoint_Y);
     sphere_Z.setPosition(planePoint_Z);
 
-    sphere_X.setRadius(25);
-    sphere_Y.setRadius(25);
-    sphere_Z.setRadius(25);
+    sphere_X.setRadius(0.05);
+    sphere_Y.setRadius(0.05);
+    sphere_Z.setRadius(0.05);
 
     
-    Planef REL_floorPlane = Planef(planePoint_X, planePoint_Y, planePoint_Z);
+    Planef REL_floorPlane = Planef(planePoint_Z, planePoint_X, planePoint_Y);
     if(REL_floorPlane.getNormal().z < 0.f){ // if it points downwards
         REL_floorPlane = Planef(planePoint_Z, planePoint_Y, planePoint_X);
     }
     
-    Linef KINECT_Z_axis = Linef(ofVec3f(0, 0, 0), ofVec3f(0, 0, -1));
+    Linef KINECT_Z_axis = Linef(ofVec3f(0, 0, 0), ofVec3f(0, 0, 1));
     
     //Y-Z plane
-    Planef KINECT_vertical_Plane = Planef(ofVec3f(0, 0, 0), ofVec3f(0, 0, -1), ofVec3f(0, 1, -1));
+    Planef KINECT_vertical_Plane = Planef(ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), ofVec3f(0, 0, 1));
     //X-Z plane
-    Planef KINECT_horizontal_Plane = Planef(ofVec3f(0, 0, 0), ofVec3f(0, 0, -1), ofVec3f(1, 0, -1));
+    Planef KINECT_horizontal_Plane = Planef(ofVec3f(0, 0, 0), ofVec3f(1, 0, 0), ofVec3f(0, 0, 1));
     
-    Linef ABS_Y_Axis;
+	Linef ABS_Y_Axis;// = Linef(planePoint_Z, planePoint_Y);
     if(KINECT_vertical_Plane.intersects(REL_floorPlane))
        ABS_Y_Axis = KINECT_vertical_Plane.getIntersection(REL_floorPlane);
     
-    ofVec3f ABS_frustumCenterPoint = REL_floorPlane.getIntersection(KINECT_Z_axis);
-    
+	ofVec3f ABS_frustumCenterPoint = REL_floorPlane.getIntersection(KINECT_Z_axis);
+	//ofVec3f ABS_frustumCenterPoint = planePoint_Z;
+
     ofVec3f ABS_Z_Axis = ofVec3f(REL_floorPlane.normal).scale(1000);
-    ofVec3f ABS_X_Axis = ofVec3f(ABS_Y_Axis.direction).cross(ABS_Z_Axis);
+    ofVec3f ABS_X_Axis = ofVec3f(ABS_Z_Axis).cross(ABS_Y_Axis.direction);
     
     ofVec3f HELPER_X_Axis = ofVec3f(ABS_frustumCenterPoint).cross(ofVec3f(ABS_Y_Axis.direction).scale(100));
     ofVec3f HELPER_Z_Axis = ofVec3f(HELPER_X_Axis).cross(ofVec3f(ABS_Y_Axis.direction).scale(100));
 
-    float kinectRransform_xAxisRot = ABS_frustumCenterPoint.angle(ofVec3f(HELPER_Z_Axis).scale(-1.));
-    float kinectRransform_yAxisRot = -HELPER_X_Axis.angle(ABS_X_Axis);
+    float kinectRransform_xAxisRot = ABS_frustumCenterPoint.angle(ofVec3f(HELPER_Z_Axis).scale(1.));
+    float kinectRransform_yAxisRot = HELPER_X_Axis.angle(ABS_X_Axis);
     
-    float kinectRransform_zTranslate = ABS_frustumCenterPoint.length();
+    float kinectRransform_zTranslate = -ABS_frustumCenterPoint.length();
 
     ofMatrix4x4 zTranMatrix = ofMatrix4x4();
     zTranMatrix.translate(0, 0, kinectRransform_zTranslate);
@@ -649,6 +650,7 @@ void ofApp::drawPreview() {
 
     //This moves the crossingpoint of the kinect center line and the plane to the center of the stage
     ofTranslate(-planeCenterPoint.x, -planeCenterPoint.y, 0);
+	ofMultMatrix(kinectRransform);
 	if (bPreviewPointCloud) {
 		realSense->draw();
 	}
@@ -677,12 +679,12 @@ void ofApp::drawPreview() {
     ofMultMatrix(kinectRransform);
 
     ofFill();
-	/*
     ofSetColor(255, 0, 0);
     sphere_X.draw();
     sphere_Y.draw();
     sphere_Z.draw();
-    frustumCenterSphere.draw();
+	/*
+	frustumCenterSphere.draw();
 	*/
 
     geometry.draw();

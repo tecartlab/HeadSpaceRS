@@ -118,9 +118,28 @@ void ofApp::setup(){
 
     device->loadFromFile(realSense->getSerialNumber(-1) + ".xml");
 
+	/////////////////////////
+	//GUI   Transfromation //
+	/////////////////////////
+
+	guitransform = gui.addPanel();
+
+	guitransform->loadTheme("theme/theme_light.json");
+	guitransform->setName("Transformation");
+
+	transformationGuiGroup.setName("Matrix");
+	transformationGuiGroup.add(transformation.set("Transform", ofMatrix4x4()));
+
+	guitransform->addGroup(transformationGuiGroup);
+
+	guitransform->loadFromFile("transformation.xml");
+
+	bool invisible = false;
+
+	guitransform->setVisible(invisible);
+
     updateMatrix();
 
-    
     /////////////////
 
 		
@@ -283,14 +302,6 @@ void ofApp::measurementCycleFine(){
 
 //--------------------------------------------------------------
 void ofApp::updateCalc(){
-        
-    sphere_X.setPosition(planePoint_X);
-    sphere_Y.setPosition(planePoint_Y);
-    sphere_Z.setPosition(planePoint_Z);
-
-    sphere_X.setRadius(0.05);
-    sphere_Y.setRadius(0.05);
-    sphere_Z.setRadius(0.05);
 
 	// This algorithm calculates the transformation matrix to 
 	// transform from the camera centered coordinate system to the
@@ -306,6 +317,9 @@ void ofApp::updateCalc(){
 	glm::vec3 newYAxis = glm::normalize(glm::vec3(planePoint_Y - planePoint_Z));
 	glm::vec3 newZAxis = glm::cross(newXAxis, newYAxis);
 
+	// the following solution was inspired by this post: https://stackoverflow.com/questions/34391968/how-to-find-the-rotation-matrix-between-two-coordinate-systems
+	// however: it uses a 4x4 matrix and puts translation data as follows:
+	//{ x.x x.y x.z 0 y.x y.y y.z 0 z.x z.y z.z 0 t.x t.y t.z 1 }
 
 	float mat[16] = {
 		newXAxis.x,
@@ -326,9 +340,7 @@ void ofApp::updateCalc(){
 		1
 	};
 
-	glm::mat4 transform = glm::make_mat4x4(mat);
-
-
+	glm::mat4 transform = glm::inverse(glm::make_mat4x4(mat));
 
     geometry.clear();
     geometry.setMode(OF_PRIMITIVE_LINES);
@@ -364,21 +376,27 @@ void ofApp::updateCalc(){
     
  //   ofLog(OF_LOG_NOTICE, "updating... ");
 
-	kinectRransform = ofMatrix4x4(glm::inverse(transform));
+	transformation.set(ofMatrix4x4(transform));
 
-    //updateMatrix();
+	updateMatrix();
 }
 
 //--------------------------------------------------------------
 void ofApp::updateMatrix(){
-    kinectRransform = ofMatrix4x4();
-    
-    kinectRransform.rotate(transformation.get().x, 1, 0, 0);
-    kinectRransform.rotate(transformation.get().y, 0, 1, 0);
 
-    kinectRransform.translate(0, 0, transformation.get().z);
+	sphere_X.setPosition(planePoint_X);
+	sphere_Y.setPosition(planePoint_Y);
+	sphere_Z.setPosition(planePoint_Z);
+
+	sphere_X.setRadius(0.05);
+	sphere_Y.setRadius(0.05);
+	sphere_Z.setRadius(0.05);
+
+    //kinectRransform = ofMatrix4x4();
     
-    blobFinder.kinectPos = ofVec3f(0, 0, transformation.get().z);    
+	kinectRransform = transformation.get();
+
+    //blobFinder.kinectPos = ofVec3f(0, 0, transformation.get().z);    
 }
 
 //--------------------------------------------------------------
@@ -762,7 +780,8 @@ void ofApp::keyPressed(int key){
 			networkMng.panel->saveToFile("broadcast.xml");
 			post->saveToFile("postprocessing.xml");
 			device->saveToFile(realSense->getSerialNumber(-1) + ".xml");
-            break;
+			guitransform->saveToFile("transformation.xml");
+			break;
 
         case 'l':
             setupCalib->loadFromFile("settings.xml");
@@ -770,7 +789,8 @@ void ofApp::keyPressed(int key){
             networkMng.panel->loadFromFile("broadcast.xml");
 			post->loadFromFile("postprocessing.xml");
 			device->loadFromFile(realSense->getSerialNumber(-1) + ".xml");
-            break;
+			guitransform->loadFromFile("transformation.xml");
+			break;
 
 		case 'm':
 			if(cam.getMouseInputEnabled()) cam.disableMouseInput();

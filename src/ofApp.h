@@ -182,12 +182,15 @@ class ofApp : public ofBaseApp{
     ofxGuiPanel *setupCalib;
 	ofxGuiPanel *device;
 	ofxGuiPanel *post;
+	ofxGuiPanel *guitransform;
 
     ofParameter<ofVec2f> calibPoint_X;
     ofParameter<ofVec2f> calibPoint_Y;
     ofParameter<ofVec2f> calibPoint_Z;
-    
-    ofParameter<ofVec3f> transformation;
+ 
+	ofParameterGroup transformationGuiGroup;
+
+    ofParameter<ofMatrix4x4> transformation;
     
     ofParameterGroup frustumGuiGroup;
 

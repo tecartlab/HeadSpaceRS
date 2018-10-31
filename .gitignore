@@ -4,3 +4,5 @@ bin/HeadRoomRS_debug.exp
 .vs/
 x64/
 *.exp
+bin/HeadSpaceRS.ipdb
+bin/HeadSpaceRS.iobj

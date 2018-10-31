@@ -14,7 +14,7 @@
 	</SensorBox>
 	<Blobs>
 		<AreaMin>1000</AreaMin>
-		<AreaMax>6000</AreaMax>
+		<AreaMax>60000</AreaMax>
 		<MaxBlobs>5</MaxBlobs>
 	</Blobs>
 	<Gazing>

@@ -486,7 +486,7 @@ void ofApp::update(){
         //////////////////////////////////
         // BlobFinding on the captured FBO
         /////////////////////////////////////
-        //blobFinder.update();
+        blobFinder.update();
 	}
     
     //networkMng.update(blobFinder, realSenseFrustum, transformation.get());
@@ -504,8 +504,8 @@ void ofApp::draw(){
 		realSense->drawInfraLeftStream(viewGrid[1]);
 
         blobFinder.captureFBO.draw(viewGrid[2]);
-        //blobFinder.contourFinder.draw(viewGrid[3]);
-        //blobFinder.contourEyeFinder.draw(viewGrid[4]);
+        blobFinder.contourFinder.draw(viewGrid[3]);
+        blobFinder.contourEyeFinder.draw(viewGrid[4]);
 
         
         switch (iMainCamera) {
@@ -522,7 +522,7 @@ void ofApp::draw(){
                 break;
             case 3:
                 ofSetColor(255, 0, 0, 255);
-                //blobFinder.contourFinder.draw(viewMain);
+                blobFinder.contourFinder.draw(viewMain);
 
                 ofNoFill();
                 ofSetColor(255, 0, 255, 255);
@@ -530,7 +530,7 @@ void ofApp::draw(){
                 
                break;
             case 4:
-                //blobFinder.contourEyeFinder.draw(viewMain);
+                blobFinder.contourEyeFinder.draw(viewMain);
 
                 ofNoFill();
                 ofSetColor(255, 0, 255, 255);

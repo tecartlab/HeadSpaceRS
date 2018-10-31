@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<Tracking___>
+	<NoiseReduction>
+		<MinSamples>2</MinSamples>
+		<DistanceFac_>1</DistanceFac_>
+	</NoiseReduction>
+	<SensorBox>
+		<left>-1572</left>
+		<right>0</right>
+		<front>1709</front>
+		<back>807</back>
+		<top>1641</top>
+		<bottom>628</bottom>
+	</SensorBox>
+	<Blobs>
+		<AreaMin>1000</AreaMin>
+		<AreaMax>6000</AreaMax>
+		<MaxBlobs>5</MaxBlobs>
+	</Blobs>
+	<Gazing>
+		<Gaze_Point>0, 0, 1500</Gaze_Point>
+		<EyeLevel>140</EyeLevel>
+		<EyeInset>0.8</EyeInset>
+	</Gazing>
+</Tracking___>

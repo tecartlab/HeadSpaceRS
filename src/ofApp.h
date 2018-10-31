@@ -132,6 +132,9 @@ class ofApp : public ofBaseApp{
     // used for viewing the point cloud
     ofEasyCam previewCam;
     
+	ofShader shader;
+	ofImage img;
+
     ///////////////
     //CALCUALTION//
     ///////////////

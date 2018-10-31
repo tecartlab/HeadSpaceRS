@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<Broadcasting__>
+	<Broadcast>
+		<IP>127.0.0.1</IP>
+		<Port>47500</Port>
+	</Broadcast>
+	<Listening>
+		<IP>127.0.0.1</IP>
+		<Port>47600</Port>
+	</Listening>
+	<Streaming>
+		<bodyBlob>1</bodyBlob>
+		<headBlob>1</headBlob>
+		<head>1</head>
+		<eye>1</eye>
+	</Streaming>
+</Broadcasting__>

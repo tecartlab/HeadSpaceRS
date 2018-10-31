@@ -8,6 +8,19 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+#ifdef TARGET_OPENGLES
+	shader.load("shadersES2/shader");
+#else
+	if (ofIsGLProgrammableRenderer()) {
+		shader.load("shadersGL3/shader");
+	}
+	else {
+		shader.load("shadersGL2/shader");
+	}
+#endif
+
+	img.load("img.jpg");
+
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
 	realSense = RSDevice::createUniquePtr();
@@ -170,6 +183,10 @@ void ofApp::setup(){
     ofSetLogLevel(OF_LOG_NOTICE);
     
     ofLogToFile("myLogFile.txt", true);
+
+	if (ofIsGLProgrammableRenderer()) {
+		ofLog(OF_LOG_NOTICE, "ofIsGLProgrammableRenderer() = " + ofToString(ofIsGLProgrammableRenderer()));
+	}
 }
 
 
@@ -340,6 +357,7 @@ void ofApp::updateCalc(){
 		1
 	};
 
+	// and what we need at the end is the inverse of this:
 	glm::mat4 transform = glm::inverse(glm::make_mat4x4(mat));
 
     geometry.clear();
@@ -633,6 +651,7 @@ void ofApp::updatePointCloud(ofVboMesh & mesh, int step, bool useFrustumCone, bo
 
 void ofApp::drawPreview() {
 	glPointSize(4);
+
 	ofPushMatrix();
 
     //This moves the crossingpoint of the kinect center line and the plane to the center of the stage
@@ -686,15 +705,28 @@ void ofApp::drawPreview() {
 }
 
 void ofApp::drawCapturePointCloud() {
+
     glEnable(GL_DEPTH_TEST);
-    glPointSize(blobGrain.get() * 2);
+	
+	shader.begin();
+
+	float lowerLimit = blobFinder.sensorBoxBottom.get() / 1000.f;
+	float upperLimit = blobFinder.sensorBoxTop.get() / 1000.f;
+
+	shader.setUniform1f("lowerLimit", lowerLimit);
+	shader.setUniform1f("upperLimit", upperLimit);
+	shader.setUniformMatrix4f("viewMatrixInverse", glm::inverse(ofGetCurrentViewMatrix()));
+
+	glPointSize(blobGrain.get() * 2);
 	ofPushMatrix();
 	ofMultMatrix(kinectRransform);
-	//ofScale(0.01, 0.01, 0.01);
 	realSense->draw();
-    //capMesh.draw();
 	ofPopMatrix();
-    glDisable(GL_DEPTH_TEST);
+	
+	shader.end();
+	
+	glDisable(GL_DEPTH_TEST);
+
 }
 
 void ofApp::drawCalibrationPoints(){

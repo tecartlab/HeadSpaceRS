@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<PostProcessing>
+	<use_PostProcessing>1</use_PostProcessing>
+	<use_decimation_filter>1</use_decimation_filter>
+	<decimation_magnitude>2</decimation_magnitude>
+	<use_disparity_filters>1</use_disparity_filters>
+	<use_spatial_filter>1</use_spatial_filter>
+	<spatial_smoothAlpha>0.5</spatial_smoothAlpha>
+	<spatial_smoothDelta>20</spatial_smoothDelta>
+	<spatial_magnitude>2</spatial_magnitude>
+	<use_temporal_Filter>1</use_temporal_Filter>
+	<temporal_smoothAlpha>0.4</temporal_smoothAlpha>
+	<temporal_smoothDelta>20</temporal_smoothDelta>
+	<temporal_persistency>3</temporal_persistency>
+</PostProcessing>

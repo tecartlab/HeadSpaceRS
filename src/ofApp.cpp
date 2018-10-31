@@ -292,88 +292,63 @@ void ofApp::updateCalc(){
     sphere_Y.setRadius(0.05);
     sphere_Z.setRadius(0.05);
 
-    
-    Planef REL_floorPlane = Planef(planePoint_Z, planePoint_X, planePoint_Y);
-    if(REL_floorPlane.getNormal().z < 0.f){ // if it points downwards
-        REL_floorPlane = Planef(planePoint_Z, planePoint_Y, planePoint_X);
-    }
-    
-    Linef KINECT_Z_axis = Linef(ofVec3f(0, 0, 0), ofVec3f(0, 0, 1));
-    
-    //Y-Z plane
-    Planef KINECT_vertical_Plane = Planef(ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), ofVec3f(0, 0, 1));
-    //X-Z plane
-    Planef KINECT_horizontal_Plane = Planef(ofVec3f(0, 0, 0), ofVec3f(1, 0, 0), ofVec3f(0, 0, 1));
-    
-	Linef ABS_Y_Axis;// = Linef(planePoint_Z, planePoint_Y);
-    if(KINECT_vertical_Plane.intersects(REL_floorPlane))
-       ABS_Y_Axis = KINECT_vertical_Plane.getIntersection(REL_floorPlane);
-    
-	ofVec3f ABS_frustumCenterPoint = REL_floorPlane.getIntersection(KINECT_Z_axis);
-	//ofVec3f ABS_frustumCenterPoint = planePoint_Z;
+	// This algorithm calculates the transformation matrix to 
+	// transform from the camera centered coordinate system to the
+	// calibration points defined coordinate system, where
+	//   point z represents the coordinate center
+	//   point x represents the x - axis from the coordinate center
+	//   point y represents the y - axis from the coordinate center
 
-    ofVec3f ABS_Z_Axis = ofVec3f(REL_floorPlane.normal).scale(1000);
-    ofVec3f ABS_X_Axis = ofVec3f(ABS_Z_Axis).cross(ABS_Y_Axis.direction);
-    
-    ofVec3f HELPER_X_Axis = ofVec3f(ABS_frustumCenterPoint).cross(ofVec3f(ABS_Y_Axis.direction).scale(100));
-    ofVec3f HELPER_Z_Axis = ofVec3f(HELPER_X_Axis).cross(ofVec3f(ABS_Y_Axis.direction).scale(100));
+	// translation vector to new coordinate system
+	glm::vec3 translate = glm::vec3(planePoint_Z);
 
-    float kinectRransform_xAxisRot = ABS_frustumCenterPoint.angle(ofVec3f(HELPER_Z_Axis).scale(1.));
-    float kinectRransform_yAxisRot = HELPER_X_Axis.angle(ABS_X_Axis);
-    
-    float kinectRransform_zTranslate = -ABS_frustumCenterPoint.length();
+	glm::vec3 newXAxis = glm::normalize(glm::vec3(planePoint_X - planePoint_Z));
+	glm::vec3 newYAxis = glm::normalize(glm::vec3(planePoint_Y - planePoint_Z));
+	glm::vec3 newZAxis = glm::cross(newXAxis, newYAxis);
 
-    ofMatrix4x4 zTranMatrix = ofMatrix4x4();
-    zTranMatrix.translate(0, 0, kinectRransform_zTranslate);
-    zTranMatrix.rotate(kinectRransform_xAxisRot, 1, 0, 0);
-    zTranMatrix.rotate(kinectRransform_yAxisRot, 0, 1, 0);
-    
-    transformation.set(ofVec3f(kinectRransform_xAxisRot, kinectRransform_yAxisRot, zTranMatrix.getTranslation().z));
-    
-    //ofLog(OF_LOG_NOTICE, "zpos: " + ofToString(kinectTransform.getTranslation().z));
-    
-    ofMatrix4x4 centerMatrix = ofMatrix4x4();
-    centerMatrix.rotate(kinectRransform_xAxisRot, 1, 0, 0);
-    centerMatrix.rotate(kinectRransform_yAxisRot, 0, 1, 0);
-    centerMatrix.translate(0, 0, zTranMatrix.getTranslation().z);
-    
-    planeCenterPoint = centerMatrix.preMult(ABS_frustumCenterPoint);
-    //planeCenterPoint.rotate(kinectRransform_xAxisRot, ofVec3f(1, 0, 0));
+
+	float mat[16] = {
+		newXAxis.x,
+		newXAxis.y,
+		newXAxis.z,
+		0,
+		newYAxis.x,
+		newYAxis.y,
+		newYAxis.z,
+		0,
+		newZAxis.x,
+		newZAxis.y,
+		newZAxis.z,
+		0,
+		translate.x,
+		translate.y,
+		translate.z,
+		1
+	};
+
+	glm::mat4 transform = glm::make_mat4x4(mat);
+
 
 
     geometry.clear();
     geometry.setMode(OF_PRIMITIVE_LINES);
-    geometry.addColor(ofColor::blueSteel);
-    geometry.addVertex(ofVec3f(0, 0, 0));
-    geometry.addColor(ofColor::blueSteel);
-    geometry.addVertex(ABS_frustumCenterPoint);
-    
+
+	geometry.addColor(ofColor::red);
+	geometry.addVertex(translate);
+	geometry.addColor(ofColor::red);
+	geometry.addVertex(translate + newXAxis);
+
+	geometry.addColor(ofColor::green);
+    geometry.addVertex(translate);
     geometry.addColor(ofColor::green);
-    geometry.addVertex(ABS_frustumCenterPoint);
-    geometry.addColor(ofColor::green);
-    geometry.addVertex(ABS_frustumCenterPoint + ofVec3f(ABS_Y_Axis.direction).scale(1000));
-    
-    geometry.addColor(ofColor::red);
-    geometry.addVertex(ABS_frustumCenterPoint);
-    geometry.addColor(ofColor::red);
-    geometry.addVertex(ABS_frustumCenterPoint + ABS_X_Axis);
+    geometry.addVertex(translate + newYAxis); 
     
     geometry.addColor(ofColor::blue);
-    geometry.addVertex(ABS_frustumCenterPoint);
+    geometry.addVertex(translate);
     geometry.addColor(ofColor::blue);
-    geometry.addVertex(ABS_frustumCenterPoint + ABS_Z_Axis);
+    geometry.addVertex(translate + newZAxis);
 
-    geometry.addColor(ofColor::blueViolet);
-    geometry.addVertex(ABS_frustumCenterPoint);
-    geometry.addColor(ofColor::blueViolet);
-    geometry.addVertex(ABS_frustumCenterPoint + HELPER_X_Axis);
-
-    geometry.addColor(ofColor::greenYellow);
-    geometry.addVertex(ABS_frustumCenterPoint);
-    geometry.addColor(ofColor::greenYellow);
-    geometry.addVertex(ABS_frustumCenterPoint + ofVec3f(HELPER_Z_Axis).scale(1000));
-    
-    calcdata = string("distance to plane center point: " + ofToString(ABS_frustumCenterPoint.length()) + "\n");
+    calcdata = string("distance to new coordinate center point: " + ofToString(glm::length(translate)) + "\n");
 	calcdata += "position point X: " + ofToString(planePoint_X) + "\n";
 	calcdata += "position point Y: " + ofToString(planePoint_Y) + "\n";
 	calcdata += "position point Z: " + ofToString(planePoint_Z) + "\n";
@@ -383,19 +358,15 @@ void ofApp::updateCalc(){
 	calcdata += "distance X to Z: " + ofToString(ofVec3f(planePoint_X - planePoint_Z).length()) + "\n";
 	calcdata += "distance Y to Z: " + ofToString(ofVec3f(planePoint_Y - planePoint_Z).length()) + "\n";
 
-
-    //ofLog(OF_LOG_NOTICE, "planeCenterPoint.x" + ofToString(planeCenterPoint.x));
-    //ofLog(OF_LOG_NOTICE, "planeCenterPoint.y" + ofToString(planeCenterPoint.y));
-    //ofLog(OF_LOG_NOTICE, "planeCenterPoint.z" + ofToString(planeCenterPoint.z));
-    //ofLog(OF_LOG_NOTICE, "yAxisRot" + ofToString(kinectRransform_yAxisRot));
-
     frustumCenterSphere.setRadius(20);
     
     bUpdateCalc = false;
     
  //   ofLog(OF_LOG_NOTICE, "updating... ");
 
-    updateMatrix();
+	kinectRransform = ofMatrix4x4(glm::inverse(transform));
+
+    //updateMatrix();
 }
 
 //--------------------------------------------------------------
@@ -649,7 +620,7 @@ void ofApp::drawPreview() {
 	ofPushMatrix();
 
     //This moves the crossingpoint of the kinect center line and the plane to the center of the stage
-    ofTranslate(-planeCenterPoint.x, -planeCenterPoint.y, 0);
+    //ofTranslate(-planeCenterPoint.x, -planeCenterPoint.y, 0);
 	ofMultMatrix(kinectRransform);
 	if (bPreviewPointCloud) {
 		realSense->draw();

@@ -461,11 +461,9 @@ void ofApp::update(){
         // Cature captureCloud to FBO
         //////////////////////////////////
         
-		/*
         blobFinder.captureBegin();
         drawCapturePointCloud();
         blobFinder.captureEnd();
-		*/
 
         //////////////////////////////////
         // BlobFinding on the captured FBO
@@ -487,7 +485,7 @@ void ofApp::draw(){
 		realSense->drawDepthStream(viewGrid[0]);
 		realSense->drawInfraLeftStream(viewGrid[1]);
 
-        //blobFinder.captureFBO.draw(viewGrid[2]);
+        blobFinder.captureFBO.draw(viewGrid[2]);
         //blobFinder.contourFinder.draw(viewGrid[3]);
         //blobFinder.contourEyeFinder.draw(viewGrid[4]);
 
@@ -502,7 +500,7 @@ void ofApp::draw(){
                 drawCalibrationPoints();
                 break;
             case 2:
-                //blobFinder.captureFBO.draw(viewMain);
+                blobFinder.captureFBO.draw(viewMain);
                 break;
             case 3:
                 ofSetColor(255, 0, 0, 255);
@@ -691,8 +689,10 @@ void ofApp::drawCapturePointCloud() {
     glEnable(GL_DEPTH_TEST);
     glPointSize(blobGrain.get() * 2);
 	ofPushMatrix();
-	ofScale(0.01, 0.01, 0.01);
-    capMesh.draw();
+	ofMultMatrix(kinectRransform);
+	//ofScale(0.01, 0.01, 0.01);
+	realSense->draw();
+    //capMesh.draw();
 	ofPopMatrix();
     glDisable(GL_DEPTH_TEST);
 }

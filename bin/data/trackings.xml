@@ -14,12 +14,14 @@
 	</SensorBox>
 	<Blobs>
 		<AreaMin>1000</AreaMin>
-		<AreaMax>60000</AreaMax>
+		<AreaMax>25854</AreaMax>
 		<MaxBlobs>5</MaxBlobs>
 	</Blobs>
 	<Gazing>
 		<Gaze_Point>0, 0, 1500</Gaze_Point>
 		<EyeLevel>140</EyeLevel>
 		<EyeInset>0.8</EyeInset>
+		<Use_gaze_point>0</Use_gaze_point>
+		<Gaze_point>0, 0, 1500</Gaze_point>
 	</Gazing>
 </Tracking___>

@@ -15,6 +15,7 @@ BlobTracker::BlobTracker(ofRectangle _rect){
     headBlob.setResolution(1, 1);
     lastUpdateFrame = 0;
     isDead = false;
+	mLifeCycles = ofGetElapsedTimeMillis();
 }
 
 bool BlobTracker::isAlive(){
@@ -72,6 +73,11 @@ ofVec3f BlobTracker::getCurrentHeadCenter(){
     if(tracker.size() > 0)
         return tracker[0].headCenter;
     return headCenter;
+}
+
+int BlobTracker::getElapsedMillis()
+{
+	return ofGetElapsedTimeMillis() - mLifeCycles;
 }
 
 void BlobTracker::updateHead(ofVec3f _headBlobCenter, ofVec2f _headBlobSize, ofVec3f _eyeCenter){

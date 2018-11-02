@@ -289,14 +289,15 @@ void BlobFinder::update(){
         }
     }
 
+	//sets the sort value to the current index.
+	int sortPos = 0;
+
+	for (int i = 0; i < trackedBlobs.size(); i++) {
+		trackedBlobs[i].sortPos = sortPos++;
+	}
+
 	// if we are using the gaze point
 	if (useGazePoint.get()) {
-		//sorts the blobs in regards to the distance of the gazepoint.
-		int sortPos = 0;
-
-		for (int i = 0; i < trackedBlobs.size(); i++) {
-			trackedBlobs[i].sortPos = sortPos++;
-		}
 		if (trackedBlobs.size() > 0) {
 			for (int i = 0; i < (trackedBlobs.size() - 1); i++) {
 				for (int j = 1; j < trackedBlobs.size(); j++) {

@@ -13,7 +13,7 @@ TrackingNetworkManager::TrackingNetworkManager(){
 
 
 void TrackingNetworkManager::setup(ofxGui &gui, string _kinectSerial){
-    kinectSerial = _kinectSerial;
+    mDeviceSerial = _kinectSerial;
 
     //RegularExpression regEx("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b");
     
@@ -33,6 +33,7 @@ void TrackingNetworkManager::setup(ofxGui &gui, string _kinectSerial){
     
     panel->loadTheme("theme/theme_light.json");
     panel->setName("Broadcasting..");
+	panel->add<ofxGuiIntInputField>(kinectServerID.set("ServerID", 0, 0, 10));
 
     streamingBodyBlob.addListener(this, &TrackingNetworkManager::listenerBool);
     streamingHeadBlob.addListener(this, &TrackingNetworkManager::listenerBool);
@@ -96,7 +97,7 @@ void TrackingNetworkManager::listenerBool(bool & _bool){
 
 
 //--------------------------------------------------------------
-void TrackingNetworkManager::update(BlobFinder & _blobFinder, Frustum & _frustum, ofVec3f _trans){
+void TrackingNetworkManager::update(BlobFinder & _blobFinder, Frustum & _frustum, ofMatrix4x4 _trans){
     frameNumber++;
     
     long currentMillis = ofGetElapsedTimeMillis();
@@ -166,8 +167,8 @@ void TrackingNetworkManager::update(BlobFinder & _blobFinder, Frustum & _frustum
 void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
     // send frame number
     ofxOscMessage frame;
-    frame.setAddress("/ks/server/track/frame");
-    frame.addIntArg(kinectID);
+    frame.setAddress("/ks/server/track/frame/start");
+    frame.addIntArg(mServerID);
     frame.addIntArg(frameNumber);
     frame.addIntArg(streamingBodyBlob.get());
     frame.addIntArg(streamingHeadBlob.get());
@@ -179,7 +180,7 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
         if(streamingBodyBlob.get()){
             ofxOscMessage bodyBlob;
             bodyBlob.setAddress("/ks/server/track/bodyblob");
-            bodyBlob.addIntArg(kinectID);
+            bodyBlob.addIntArg(mServerID);
             bodyBlob.addIntArg(frameNumber);
             bodyBlob.addIntArg(i);
             bodyBlob.addIntArg(_blobFinder.trackedBlobs[i].sortPos);
@@ -194,7 +195,7 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
         if(streamingHeadBlob.get()){
             ofxOscMessage headBlob;
             headBlob.setAddress("/ks/server/track/headblob");
-            headBlob.addIntArg(kinectID);
+            headBlob.addIntArg(mServerID);
             headBlob.addIntArg(frameNumber);
             headBlob.addIntArg(i);
             headBlob.addIntArg(_blobFinder.trackedBlobs[i].sortPos);
@@ -209,7 +210,7 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
         if(streamingHead.get()){
             ofxOscMessage head;
             head.setAddress("/ks/server/track/head");
-            head.addIntArg(kinectID);
+            head.addIntArg(mServerID);
             head.addIntArg(frameNumber);
             head.addIntArg(i);
             head.addIntArg(_blobFinder.trackedBlobs[i].sortPos);
@@ -225,7 +226,7 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
         if(streamingEye.get()){
             ofxOscMessage eye;
             eye.setAddress("/ks/server/track/eye");
-            eye.addIntArg(kinectID);
+            eye.addIntArg(mServerID);
             eye.addIntArg(frameNumber);
             eye.addIntArg(i);
             eye.addIntArg(_blobFinder.trackedBlobs[i].sortPos);
@@ -241,8 +242,8 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
         
         // send frame number
         ofxOscMessage framedone;
-        framedone.setAddress("/ks/server/track/framedone");
-        framedone.addIntArg(kinectID);
+        framedone.setAddress("/ks/server/track/frame/end");
+        framedone.addIntArg(mServerID);
         framedone.addIntArg(frameNumber);
         sendMessageToTrackingClients(framedone);
     }
@@ -251,7 +252,7 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
 void TrackingNetworkManager::sendCalibFrustum(Frustum & _frustum, string _ip, int _port){
     ofxOscMessage frustum;
     frustum.setAddress("/ks/server/calib/frustum");
-    frustum.addIntArg(kinectID);
+    frustum.addIntArg(mServerID);
     frustum.addFloatArg(_frustum.left * scale);
     frustum.addFloatArg(_frustum.right * scale);
     frustum.addFloatArg(_frustum.bottom * scale);
@@ -263,14 +264,27 @@ void TrackingNetworkManager::sendCalibFrustum(Frustum & _frustum, string _ip, in
     broadcastSender.sendMessage(frustum);
 }
 
-void TrackingNetworkManager::sendCalibTrans(ofVec3f & _trans, string _ip, int _port){
+void TrackingNetworkManager::sendCalibTrans(ofMatrix4x4 & _trans, string _ip, int _port){
     ofxOscMessage trans;
     trans.setAddress("/ks/server/calib/trans");
-    trans.addIntArg(kinectID);
-    trans.addFloatArg(_trans.x);
-    trans.addFloatArg(_trans.y);
-    trans.addFloatArg(_trans.z * scale);
-    
+    trans.addIntArg(mServerID);
+	trans.addFloatArg(_trans._mat[0].x);
+	trans.addFloatArg(_trans._mat[0].y);
+	trans.addFloatArg(_trans._mat[0].z);
+	trans.addFloatArg(_trans._mat[0].w);
+	trans.addFloatArg(_trans._mat[1].x);
+	trans.addFloatArg(_trans._mat[1].y);
+	trans.addFloatArg(_trans._mat[1].z);
+	trans.addFloatArg(_trans._mat[1].w);
+	trans.addFloatArg(_trans._mat[2].x);
+	trans.addFloatArg(_trans._mat[2].y);
+	trans.addFloatArg(_trans._mat[2].z);
+	trans.addFloatArg(_trans._mat[2].w);
+	trans.addFloatArg(_trans._mat[3].x);
+	trans.addFloatArg(_trans._mat[3].y);
+	trans.addFloatArg(_trans._mat[3].z);
+	trans.addFloatArg(_trans._mat[3].w);
+
     broadcastSender.setup(_ip, _port);
     broadcastSender.sendMessage(trans);
 }
@@ -278,7 +292,7 @@ void TrackingNetworkManager::sendCalibTrans(ofVec3f & _trans, string _ip, int _p
 void TrackingNetworkManager::sendCalibSensorBox(BlobFinder & _blobFinder, string _ip, int _port){
     ofxOscMessage sensorbox;
     sensorbox.setAddress("/ks/server/calib/sensorbox");
-    sensorbox.addIntArg(kinectID);
+    sensorbox.addIntArg(mServerID);
     sensorbox.addFloatArg(_blobFinder.sensorBoxLeft.get() * scale);
     sensorbox.addFloatArg(_blobFinder.sensorBoxRight.get() * scale);
     sensorbox.addFloatArg(_blobFinder.sensorBoxBottom.get() * scale);
@@ -293,7 +307,7 @@ void TrackingNetworkManager::sendCalibSensorBox(BlobFinder & _blobFinder, string
 void TrackingNetworkManager::sendGazePoint(BlobFinder & _blobFinder, string _ip, int _port){
     ofxOscMessage sensorbox;
     sensorbox.setAddress("/ks/server/calib/gazepoint");
-    sensorbox.addIntArg(kinectID);
+    sensorbox.addIntArg(mServerID);
     sensorbox.addFloatArg(_blobFinder.gazePoint.get().x * scale);
     sensorbox.addFloatArg(_blobFinder.gazePoint.get().y * scale);
     sensorbox.addFloatArg(_blobFinder.gazePoint.get().z * scale);
@@ -334,8 +348,8 @@ int TrackingNetworkManager::getTrackingClientIndex(string _ip, int _port){
 void TrackingNetworkManager::sendBroadCastAddress(){
     ofxOscMessage broadcast;
     broadcast.setAddress("/ks/server/broadcast");
-	broadcast.addStringArg(kinectSerial);
-	broadcast.addIntArg(kinectID);
+	broadcast.addStringArg(mDeviceSerial);
+	broadcast.addIntArg(mServerID);
 	broadcast.addStringArg(listeningIP.get());
 	broadcast.addIntArg(listeningPort.get());
     

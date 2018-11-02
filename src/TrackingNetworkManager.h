@@ -35,12 +35,12 @@ public:
     TrackingNetworkManager();
     
     void setup(ofxGui &gui, string _kinectSerial);
-    void update(BlobFinder & _blobFinder, Frustum & _frustum, ofVec3f _trans);
+    void update(BlobFinder & _blobFinder, Frustum & _frustum, ofMatrix4x4 _trans);
 
     void sendTrackingData(BlobFinder & _blobFinder);
 
     void sendCalibFrustum(Frustum & _frustum, string ip, int port);
-    void sendCalibTrans(ofVec3f & _trans, string _ip, int _port);
+    void sendCalibTrans(ofMatrix4x4 & _trans, string _ip, int _port);
     void sendCalibSensorBox(BlobFinder & _blobFinder, string _ip, int _port);
     void sendGazePoint(BlobFinder & _blobFinder, string _ip, int _port);
 
@@ -60,8 +60,8 @@ public:
 
     vector<string>  localIpAddresses;
     
-    string          kinectSerial;
-    int             kinectID;
+    string          mDeviceSerial;
+    int             mServerID;
     
     float           scale;
     

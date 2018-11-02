@@ -116,7 +116,7 @@ void ofApp::setup(){
     
 	device->loadTheme("theme/theme_light.json");
 	device->setName("RealSense Device");
-	device->add<ofxGuiLabel>(kinectSerialID);
+	device->add<ofxGuiLabel>(realSense->getSerialNumber(-1));
 
     intrinsicGuiGroup.setName("Settings");
 	intrinsicGuiGroup.add(realSense->param_deviceLaser);
@@ -160,7 +160,7 @@ void ofApp::setup(){
 	// creating preview point cloud is bogging the system down, so switched off at startup
 	bPreviewPointCloud = false;
     
-    networkMng.setup(gui, kinectSerialID);
+    networkMng.setup(gui, realSense->getSerialNumber(-1));
     
     int * val = 0;
     updateFrustumCone(*val);
@@ -469,12 +469,6 @@ void ofApp::update(){
         if(bUpdateMeasurmentFine){
             measurementCycleFine();
         }
-		/*
-		updatePointCloud(capMesh.update(), blobGrain.get(), true, false);
-		if(bPreviewPointCloud) {
-		updatePointCloud(previewmesh, blobGrain.get() + 1, false, true);
-		}
-		*/
     
         //////////////////////////////////
         // Cature captureCloud to FBO
@@ -490,7 +484,7 @@ void ofApp::update(){
         blobFinder.update();
 	}
     
-    //networkMng.update(blobFinder, realSenseFrustum, transformation.get());
+    networkMng.update(blobFinder, realSenseFrustum, transformation.get());
 }
 
 //--------------------------------------------------------------
@@ -713,7 +707,7 @@ void ofApp::createHelp(){
 	help += "press t -> to terminate the connection, connection is: " + ofToString(realSense->isRunning()) + "\n";
 	help += "press o -> to open the connection again\n";
     help += "ATTENTION: Setup-Settings (ServerID and Video) will only apply after restart\n";
- 	help += "Broadcasting ip: "+networkMng.broadcastIP.get()+" port: "+ofToString(networkMng.broadcastPort.get())+" serverID: "+ofToString(networkMng.kinectID)+" \n";
+ 	help += "Broadcasting ip: "+networkMng.broadcastIP.get()+" port: "+ofToString(networkMng.broadcastPort.get())+" serverID: "+ofToString(networkMng.mServerID)+" \n";
  	help += "Correction Distance Math -> corrected distance = distance * (Base + distance / Divisor)\n";
 	help += "Correction pixel Site    -> corrected pixel size = pixel size * Factor\n";
     /*

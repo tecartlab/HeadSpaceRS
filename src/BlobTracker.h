@@ -34,6 +34,8 @@ public:
     void updateEnd(ofVec3f _kinectPos, int _smoothOffset, float _smoothFactor);
     
     ofVec3f getCurrentHeadCenter();
+
+	int getElapsedMillis();
     
     void drawBodyBox();
     void drawHeadTop();
@@ -82,6 +84,7 @@ public:
     vector <ofVec3f> countour;
 
     int lastUpdateFrame;
+	int mLifeCycles;
     
 };
 

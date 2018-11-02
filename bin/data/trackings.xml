@@ -5,12 +5,12 @@
 		<DistanceFac_>1</DistanceFac_>
 	</NoiseReduction>
 	<SensorBox>
-		<left>-1572</left>
-		<right>0</right>
-		<front>1709</front>
-		<back>807</back>
-		<top>1641</top>
-		<bottom>628</bottom>
+		<left>-51</left>
+		<right>2034</right>
+		<front>2051</front>
+		<back>897</back>
+		<top>1717</top>
+		<bottom>1000</bottom>
 	</SensorBox>
 	<Blobs>
 		<AreaMin>1000</AreaMin>

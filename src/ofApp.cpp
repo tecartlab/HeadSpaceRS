@@ -526,7 +526,7 @@ void ofApp::draw(){
 
                 ofNoFill();
                 ofSetColor(255, 0, 255, 255);
-                //blobFinder.drawBodyBlobs2d(viewMain);
+                blobFinder.drawBodyBlobs2d(viewMain);
                 
                break;
             case 4:
@@ -534,7 +534,7 @@ void ofApp::draw(){
 
                 ofNoFill();
                 ofSetColor(255, 0, 255, 255);
-                //blobFinder.drawBodyBlobs2d(viewMain);
+                blobFinder.drawBodyBlobs2d(viewMain);
                 break;
             case 5:
                 previewCam.begin(viewMain);
@@ -563,11 +563,11 @@ void ofApp::draw(){
         ofDrawRectangle(viewGrid[iMainCamera]);
     } else {
 
-        //blobFinder.contourEyeFinder.draw(viewMain);
+        blobFinder.contourEyeFinder.draw(viewMain);
 
         ofNoFill();
         ofSetColor(255, 0, 255, 255);
-        //blobFinder.drawBodyBlobs2d(viewMain);
+        blobFinder.drawBodyBlobs2d(viewMain);
     }
 
     //--
@@ -589,68 +589,9 @@ void ofApp::draw(){
     ofPopStyle();
 }
 
-void ofApp::updatePointCloud(ofVboMesh & mesh, int step, bool useFrustumCone, bool useVideoColor) {
-	/*
-	
-    int w = 640;
-	int h = 480;
-    //	ofMesh mesh;
-    mesh.clear();
-	mesh.setMode(OF_PRIMITIVE_POINTS);
-    
-    double ref_pix_size = 2 * kinect.getZeroPlanePixelSize() * pixelSizeCorrector.get();
-    double ref_distance = kinect.getZeroPlaneDistance();
-    ofShortPixelsRef raw = kinect.getRawDepthPixels();
-    double factor = 0;
-    double corrDistance;
-    
-    int minRaw = 10000;
-    int maxRaw = 0;
-    
-    ofVec3f vertex;
-    
-    float sensorFieldFront = blobFinder.sensorBoxFront.get();
-    float sensorFieldBack = blobFinder.sensorBoxBack.get();
-    float sensorFieldLeft = blobFinder.sensorBoxLeft.get();
-    float sensorFieldRight = blobFinder.sensorBoxRight.get();
-    float sensorFieldTop = blobFinder.sensorBoxTop .get();
-    float sensorFieldBottom = blobFinder.sensorBoxBottom.get();
-    
-	for(int y = 0; y < h; y += step) {
-		for(int x = 0; x < w; x += step) {
-            vertex.z = 0;
-            corrDistance = (float)raw[y * w + x] * (depthCorrectionBase.get() + (float)raw[y * w + x] / depthCorrectionDivisor.get());
-            factor = ref_pix_size * corrDistance / ref_distance;
-            if(useFrustumCone){
-                if(nearFrustum.get() < corrDistance && corrDistance < farFrustum.get()) {
-                    vertex = ofVec3f((x - DEPTH_X_RES/2) *factor, -(y - DEPTH_Y_RES/2) *factor, -corrDistance);
-                    vertex = kinectRransform.preMult(vertex);
-                }
-            } else {
-                vertex = ofVec3f((x - DEPTH_X_RES/2) *factor, -(y - DEPTH_Y_RES/2) *factor, -corrDistance);
-                vertex = kinectRransform.preMult(vertex);
-            }
-            if(vertex.z != 0){
-                if(sensorFieldLeft < vertex.x && vertex.x < sensorFieldRight &&
-                   sensorFieldFront < vertex.y && vertex.y < sensorFieldBack &&
-                   sensorFieldBottom < vertex.z && vertex.z < sensorFieldTop){
-                    mesh.addColor((vertex.z - sensorFieldBottom) / (sensorFieldTop - sensorFieldBottom));
-                } else {
-                    if(useVideoColor)
-                        mesh.addColor(kinect.getColorAt(x,y));
-                    else
-                        mesh.addColor(ofColor::black);
-                }
-                mesh.addVertex(vertex);
-			}
-  		}
-	}
-	*/
-
-}
-
 void ofApp::drawPreview() {
 	glPointSize(4);
+	glEnable(GL_DEPTH_TEST);
 
 	ofPushMatrix();
 
@@ -666,7 +607,9 @@ void ofApp::drawPreview() {
 
     ofSetColor(255, 255, 0);
     blobFinder.sensorBox.draw();
-    
+
+	ofScale(0.001);
+
     ofNoFill();
     ofSetColor(255, 100, 255);
     blobFinder.drawBodyBlobsBox();
@@ -680,7 +623,10 @@ void ofApp::drawPreview() {
     ofSetColor(255, 100, 100);
     blobFinder.drawGazePoint();
 
-	glEnable(GL_DEPTH_TEST);
+
+	ofPopMatrix();
+
+	ofPushMatrix();
     
     ofMultMatrix(kinectRransform);
 
@@ -695,8 +641,8 @@ void ofApp::drawPreview() {
 
     geometry.draw();
 
-    ofSetColor(0, 0, 255);
-    realSenseFrustum.drawWireframe();
+    //ofSetColor(0, 0, 255);
+    //realSenseFrustum.drawWireframe();
     
 
 	glDisable(GL_DEPTH_TEST);

@@ -10,7 +10,8 @@
 
 BlobTracker::BlobTracker(ofRectangle _rect){
     baseRectangle2d = _rect;
-    trackerSize = 5;
+	newBaseRectangle2d = _rect;
+	trackerSize = 5;
     headBlob.setResolution(1, 1);
     lastUpdateFrame = 0;
     isDead = false;

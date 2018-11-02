@@ -115,8 +115,6 @@ class ofApp : public ofBaseApp{
     
     Frustum realSenseFrustum;
     
-    void updatePointCloud(ofVboMesh & mesh, int step, bool useFrustumCone, bool useVideoColor);
-    void renderPointCloud(int step, bool useFrustumCone);
     void drawPreview();
     void drawCapturePointCloud();
 

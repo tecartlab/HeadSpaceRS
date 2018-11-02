@@ -44,7 +44,8 @@ void ofApp::setup(){
     
     previewCam.setUpAxis(glm::vec3(0, 0, 1));
     previewCam.setTranslationSensitivity(2., 2., 2.);
-    
+	previewCam.setNearClip(0.001f);
+
     /////////////////
     //BLOBFINDER   //
     /////////////////

@@ -93,8 +93,10 @@ public:
     bool parameterHasUpdated;
 
     ofxGuiPanel *panel;
-    
-    ofParameterGroup sensorBoxGuiGroup;
+	ofxGuiGroup *blobSmoothGroup;
+	ofxGuiGroup *sensorBoxGuiGroup;
+	ofxGuiGroup *blobGuiGroup;
+	ofxGuiGroup *blobEyeGroup;
 
     ofParameter<int> sensorBoxLeft;
     ofParameter<int> sensorBoxRight;
@@ -104,22 +106,19 @@ public:
     ofParameter<int> sensorBoxBack;
     ofParameter<int> nearFrustum;
     ofParameter<int> farFrustum;
-    
-    ofParameterGroup blobGuiGroup;
-    
+       
     ofParameter<int> blobAreaMin;
     ofParameter<int> blobAreaMax;
     ofParameter<int> countBlob;
 
-    ofParameterGroup blobEyeGroup;
-
     ofParameter<float> eyeLevel;
     ofParameter<float> eyeInset;
+
+	ofParameter<bool> useGazePoint;
 
     ofParameter<ofVec3f> gazePoint;
     ofSpherePrimitive gazePointer;
 
-    ofParameterGroup blobSmoothGroup;
     ofParameter<int> smoothOffset;
     ofParameter<float> smoothFactor;
 

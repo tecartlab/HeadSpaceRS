@@ -22,11 +22,10 @@ void BlobFinder::setup(ofxGui &gui){
     panel->loadTheme("theme/theme_light.json");
     panel->setName("Tracking...");
 
-    blobSmoothGroup.setName("NoiseReduction");
-    blobSmoothGroup.add(smoothOffset.set("MinSamples", 2, 1, 10));
-    blobSmoothGroup.add(smoothFactor.set("DistanceFac.",  1., 0., 5.));
-    panel->addGroup(blobSmoothGroup);
-
+	blobSmoothGroup = panel->addGroup("NoiseReduction");
+    blobSmoothGroup->add(smoothOffset.set("MinSamples", 2, 1, 10));
+    blobSmoothGroup->add(smoothFactor.set("DistanceFac.",  1., 0., 5.));
+ 
     sensorBoxLeft.addListener(this, &BlobFinder::updateSensorBox);
     sensorBoxRight.addListener(this, &BlobFinder::updateSensorBox);
     sensorBoxFront.addListener(this, &BlobFinder::updateSensorBox);
@@ -34,26 +33,24 @@ void BlobFinder::setup(ofxGui &gui){
     sensorBoxTop.addListener(this, &BlobFinder::updateSensorBox);
     sensorBoxBottom.addListener(this, &BlobFinder::updateSensorBox);
     
-    sensorBoxGuiGroup.setName("SensorBox");
-    sensorBoxGuiGroup.add(sensorBoxLeft.set("left", -500, 0, -4000));
-    sensorBoxGuiGroup.add(sensorBoxRight.set("right", 500, 0, 4000));
-    sensorBoxGuiGroup.add(sensorBoxFront.set("front", 0, 0, 10000));
-    sensorBoxGuiGroup.add(sensorBoxBack.set("back", 2000, 0, 7000));
-    sensorBoxGuiGroup.add(sensorBoxTop.set("top", 2200, 0, 3000));
-    sensorBoxGuiGroup.add(sensorBoxBottom.set("bottom", 1000, 0, 3000));
-    panel->addGroup(sensorBoxGuiGroup);
-    
-    blobGuiGroup.setName("Blobs");
-    blobGuiGroup.add(blobAreaMin.set("AreaMin", 1000, 0, 30000));
-    blobGuiGroup.add(blobAreaMax.set("AreaMax", 6000, 0, 50000));
-    blobGuiGroup.add(countBlob.set("MaxBlobs", 5, 1, N_MAX_BLOBS));
-    panel->addGroup(blobGuiGroup);
+	sensorBoxGuiGroup = panel->addGroup("SensorBox");
+    sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxLeft.set("left", 1000));
+    sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxRight.set("right", -1000));
+    sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxFront.set("front", 1000));
+    sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxBack.set("back", -1000));
+    sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxTop.set("top", 2000));
+    sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxBottom.set("bottom", 1000));
 
-    blobEyeGroup.setName("Gazing");
-    blobEyeGroup.add(gazePoint.set("Gaze Point", ofVec3f(0, 0, 1500), ofVec3f(-2000, 0, 0), ofVec3f(2000, 5000, 3000)));
-    blobEyeGroup.add(eyeLevel.set("EyeLevel", 140, 0, 200));
-    blobEyeGroup.add(eyeInset.set("EyeInset", .8, 0, 1));
-    panel->addGroup(blobEyeGroup);
+	blobGuiGroup = panel->addGroup("Blobs");
+    blobGuiGroup->add(blobAreaMin.set("AreaMin", 1000, 0, 30000));
+    blobGuiGroup->add(blobAreaMax.set("AreaMax", 6000, 0, 50000));
+    blobGuiGroup->add(countBlob.set("MaxBlobs", 5, 1, N_MAX_BLOBS));
+ 
+	blobEyeGroup = panel->addGroup("Gazing");
+	blobEyeGroup->add(useGazePoint.set("Use gaze point", true));
+    blobEyeGroup->add(gazePoint.set("Gaze point", ofVec3f(0, 0, 1500), ofVec3f(-2000, 0, 0), ofVec3f(2000, 5000, 3000)));
+    blobEyeGroup->add(eyeLevel.set("EyeLevel", 140, 0, 200));
+    blobEyeGroup->add(eyeInset.set("EyeInset", .8, 0, 1));
     
     panel->loadFromFile("trackings.xml");
 
@@ -292,32 +289,36 @@ void BlobFinder::update(){
         }
     }
 
+	// if we are using the gaze point
+	if (useGazePoint.get()) {
+		//sorts the blobs in regards to the distance of the gazepoint.
+		int sortPos = 0;
 
-    //sorts the blobs in regards to the distance of the gazepoint.
-    int sortPos = 0;
+		for (int i = 0; i < trackedBlobs.size(); i++) {
+			trackedBlobs[i].sortPos = sortPos++;
+		}
+		if (trackedBlobs.size() > 0) {
+			for (int i = 0; i < (trackedBlobs.size() - 1); i++) {
+				for (int j = 1; j < trackedBlobs.size(); j++) {
+					if ((trackedBlobs[i].headCenter - gazePoint.get()).length() < (trackedBlobs[j].headCenter - gazePoint.get()).length()) {
+						if (trackedBlobs[i].sortPos > trackedBlobs[j].sortPos) {
+							int savepos = trackedBlobs[j].sortPos;
+							trackedBlobs[j].sortPos = trackedBlobs[i].sortPos;
+							trackedBlobs[i].sortPos = savepos;
+						}
+					}
+					else {
+						if (trackedBlobs[i].sortPos < trackedBlobs[j].sortPos) {
+							int savepos = trackedBlobs[j].sortPos;
+							trackedBlobs[j].sortPos = trackedBlobs[i].sortPos;
+							trackedBlobs[i].sortPos = savepos;
+						}
+					}
+				}
+			}
+		}
+	}
 
-    for(int i = 0; i < trackedBlobs.size(); i++){
-        trackedBlobs[i].sortPos = sortPos++;
-    }
-    if(trackedBlobs.size() > 0){
-        for(int i = 0; i < (trackedBlobs.size() - 1); i++){
-            for(int j = 1; j < trackedBlobs.size(); j++){
-                if((trackedBlobs[i].headCenter - gazePoint.get()).length() < (trackedBlobs[j].headCenter - gazePoint.get()).length()){
-                    if(trackedBlobs[i].sortPos > trackedBlobs[j].sortPos){
-                        int savepos = trackedBlobs[j].sortPos;
-                        trackedBlobs[j].sortPos = trackedBlobs[i].sortPos;
-                        trackedBlobs[i].sortPos = savepos;
-                    }
-                } else {
-                    if(trackedBlobs[i].sortPos < trackedBlobs[j].sortPos){
-                        int savepos = trackedBlobs[j].sortPos;
-                        trackedBlobs[j].sortPos = trackedBlobs[i].sortPos;
-                        trackedBlobs[i].sortPos = savepos;
-                    }
-                }
-            }
-        }
-    }
      
     //updates all alive blobs and removes all the blobs that havent had an update for a specific number of frames or have been killed
     for(int i = 0; i < trackedBlobs.size(); i++){
@@ -371,10 +372,12 @@ void BlobFinder::drawEyeCenters(){
 }
 
 void BlobFinder::drawGazePoint(){
-    //gazePointer.setPosition(gazePoint.get());
-    //gazePointer.ofNode::draw();
-    ofDrawSphere(gazePoint.get().x, gazePoint.get().y, gazePoint.get().z, 50);
-    ofDrawLine(gazePoint.get().x, gazePoint.get().y, 0, gazePoint.get().x, gazePoint.get().y, 3000);
+	if (useGazePoint.get()) {
+		//gazePointer.setPosition(gazePoint.get());
+		//gazePointer.ofNode::draw();
+		ofDrawSphere(gazePoint.get().x, gazePoint.get().y, gazePoint.get().z, 50);
+		ofDrawLine(gazePoint.get().x, gazePoint.get().y, 0, gazePoint.get().x, gazePoint.get().y, 3000);
+	}
 }
 
 bool BlobFinder::hasParamUpdate(){

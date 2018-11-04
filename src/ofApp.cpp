@@ -19,7 +19,6 @@ void ofApp::setup(){
 	}
 #endif
 
-	img.load("img.jpg");
 
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
@@ -33,26 +32,41 @@ void ofApp::setup(){
 	//ofSetVerticalSync(true);
 	//ofSetFrameRate(30);
     
-    //create the socket and set to send to 127.0.0.1:11999
-	//udpConnection.Create();
-	//udpConnection.Connect("127.0.0.1",4653);
-	//udpConnection.SetNonBlocking(true);
+	/////////////////////////////
+	//     DEFINE VIEWPORTS    //
+	/////////////////////////////
 
-	//TCP.setMessageDelimiter("\n");
-    
+	float xOffset = VIEWGRID_WIDTH; //ofGetWidth() / 3;
+	float yOffset = VIEWPORT_HEIGHT / N_CAMERAS;
+
+	viewMain.x = xOffset;
+	viewMain.y = 0;
+	viewMain.width = ofGetWidth() - xOffset - MENU_WIDTH; //xOffset * 2;
+	viewMain.height = VIEWPORT_HEIGHT;
+
+	for (int i = 0; i < N_CAMERAS; i++) {
+
+		viewGrid[i].x = 0;
+		viewGrid[i].y = yOffset * i;
+		viewGrid[i].width = xOffset;
+		viewGrid[i].height = yOffset;
+	}
+
     iMainCamera = 0;
     
     previewCam.setUpAxis(glm::vec3(0, 0, 1));
     previewCam.setTranslationSensitivity(2., 2., 2.);
 	previewCam.setNearClip(0.001f);
 
-    /////////////////
-    //BLOBFINDER   //
-    /////////////////
-    
-    blobFinder.setup(gui);
-    
-    blobFinder.allocate();
+	////////////////////
+	//  BLOBFINDER    //
+	////////////////////
+
+	blobFinder.setup(gui);
+
+	/////////////////////////////
+	//   REALSENSE GUI   SETUP //
+	/////////////////////////////
 
 	post = gui.addPanel();
 	post->loadTheme("theme/theme_light.json");
@@ -108,9 +122,9 @@ void ofApp::setup(){
 
 	std:string kinectSerialID = "noID";
         
-    ////////////////
-    //GUI   DEVICE //
-    ////////////////
+    ////////////////////
+    //   GUI   DEVICE //
+    ////////////////////
 
 	device = gui.addPanel();
     
@@ -132,9 +146,9 @@ void ofApp::setup(){
 
     device->loadFromFile(realSense->getSerialNumber(-1) + ".xml");
 
-	/////////////////////////
-	//GUI   Transfromation //
-	/////////////////////////
+	////////////////////////////
+	//   GUI   Transfromation //
+	////////////////////////////
 
 	guitransform = gui.addPanel();
 
@@ -155,8 +169,6 @@ void ofApp::setup(){
     updateMatrix();
 
     /////////////////
-
-		
 	// creating preview point cloud is bogging the system down, so switched off at startup
 	bPreviewPointCloud = false;
     
@@ -171,15 +183,6 @@ void ofApp::setup(){
     
     capMesh.reSize(4);
     
-    ////////////////
-    //CAIRO RENDER //
-    ////////////////
-    /*
-    opengl = ofGetGLRenderer();
-    cairo = make_shared<ofCairoRenderer>();
-    cairo->setupMemoryOnly(ofCairoRenderer::IMAGE);
-    render.allocate(ofGetWidth() / 5., ofGetHeight() / 5., GL_RGBA);
-     */
     
     ofSetLogLevel(OF_LOG_NOTICE);
     
@@ -208,24 +211,6 @@ void ofApp::setupViewports(){
 	networkMng.panel->setPosition(ofGetWidth() - MENU_WIDTH / 4, 20);
     //ofLog(OF_LOG_NOTICE, "ofGetWidth()" + ofToString(ofGetWidth()));
 
-	//--
-	// Define viewports
-    
-	float xOffset = VIEWGRID_WIDTH; //ofGetWidth() / 3;
-	float yOffset = VIEWPORT_HEIGHT / N_CAMERAS;
-    
-	viewMain.x = xOffset;
-	viewMain.y = 0;
-	viewMain.width = ofGetWidth() - xOffset - MENU_WIDTH; //xOffset * 2;
-	viewMain.height = VIEWPORT_HEIGHT;
-    
-	for(int i = 0; i < N_CAMERAS; i++){
-        
-		viewGrid[i].x = 0;
-		viewGrid[i].y = yOffset * i;
-		viewGrid[i].width = xOffset;
-		viewGrid[i].height = yOffset;
-	}
     
 	//
 	//--
@@ -475,8 +460,10 @@ void ofApp::update(){
         //////////////////////////////////
         
         blobFinder.captureBegin();
-        drawCapturePointCloud();
-        blobFinder.captureEnd();
+		drawCapturePointCloud();
+		blobFinder.captureEnd();
+
+		blobFinder.applyMask();
 
         //////////////////////////////////
         // BlobFinding on the captured FBO
@@ -513,7 +500,7 @@ void ofApp::draw(){
                 drawCalibrationPoints();
                 break;
             case 2:
-                blobFinder.captureFBO.draw(viewMain);
+                blobFinder.fbo.draw(viewMain);
                 break;
             case 3:
                 ofSetColor(255, 0, 0, 255);

@@ -27,11 +27,13 @@ class BlobFinder {
     
 public:
     void setup(ofxGui &gui);
-    void allocate();
+    void allocate(int &value);
     
     void captureBegin();
     void captureEnd();
     
+	void applyMask();
+
     void update();
     bool hasParamUpdate();
 
@@ -48,9 +50,7 @@ public:
     void drawGazePoint();
 
     vector <BlobTracker> blobEvents;
-    
-    ofVec2f captureScreenSize;
-    
+       
     ofVec3f kinectPos;
     
     ofPixels greyRef_store1;
@@ -64,6 +64,14 @@ public:
     
     //ofImage capturedImage;
     ofFbo captureFBO;
+
+	ofFbo       maskFbo;
+	ofFbo       fbo;
+
+	ofShader    maskShader;
+
+	ofImage     maskImg;
+	ofImage     brushImg;
 
 
     /////////////////
@@ -119,8 +127,13 @@ public:
     ofParameter<ofVec3f> gazePoint;
     ofSpherePrimitive gazePointer;
 
-    ofParameter<int> eventBreathSize;
-    ofParameter<float> smoothFactor;
+	ofParameter<int> eventBreathSize;
+	ofParameter<int> eventMaxSize;
+	ofParameter<float> smoothFactor;
+
+	ofParameter<int> sensorFboSize;
+
+	ofVec2f captureScreenSize;
 
     ofVboMesh sensorBox;
    

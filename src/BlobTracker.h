@@ -30,17 +30,27 @@ public:
     bool isDying();
 
 	// returns true if this event is dead and can be removed
-	bool canBeDisposed();
-	bool canBeDisposed(bool _forceDisposal);
+	bool checkForDisposal();
+
+	// dispose this event in any case in the next recycling 
+	void dispose();
 
 	// return true if it matches and is not dying and hasn't been matched before.
-    bool isMatching(ofRectangle _rect);
+    bool isMatching(ofRectangle _rect, int maxDistance);
+
+	// sets this event as beeing matched.
+	void setAsMatched();
+
+	// returns true if the event has already been matched.
+	bool hasBeenMatched();
     
     void updatePrepare();
     void updateBody(ofRectangle _rect, glm::vec3 _bodyBlobCenter, glm::vec2 _bodyBlobSize, glm::vec3 _headTop, glm::vec3 _headCenter, float _eyelevel, float _smoothPos);
     void updateHead(glm::vec3 _headBlobCenter, glm::vec2 _headBlobSize, glm::vec3 _eyeCenter, float _smoothPos);
-    void updateEnd(glm::vec3 _kinectPos, int _smoothOffset, float _smoothFactor);
     
+	// returns true if it has been updated
+	bool hasBeenUpdated();
+
     ofVec3f getCurrentHeadCenter();
 
 	int getElapsedMillis();
@@ -52,10 +62,8 @@ public:
     
     bool hasBodyUpdated;
     bool hasHeadUpdated;
-	bool hasBeenMatched;
+	bool mHasBeenMatched;
 
-    bool valid;
-    
     bool mIsDying;
     
     int sortPos;

@@ -616,3 +616,507 @@
 
 --------------------------------------- 2018-11-04-14-07-00-815
 [notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-14-22-32-297
+
+
+--------------------------------------- 2018-11-04-14-26-13-312
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-14-36-04-972
+
+
+--------------------------------------- 2018-11-04-15-07-44-205
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-15-09-39-053
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-15-21-36-570
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-15-50-50-693
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-16-22-16-560
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-16-53-20-571
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-16-54-36-264
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-16-55-24-992
+
+
+--------------------------------------- 2018-11-04-16-56-12-878
+
+
+--------------------------------------- 2018-11-04-16-58-51-873
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-00-37-127
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-03-08-956
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-04-49-271
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-08-10-385
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-10-13-894
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-11-46-111
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-14-41-823
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-42-58-038
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-47-32-886
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-49-30-511
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-54-33-187
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-17-58-54-382
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-18-03-18-234
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-18-05-17-478
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-18-31-03-330
+[ error ] ofxCvColorImage: setFromPixels(): width and height are zero
+[ error ] ofxCvGrayscaleImage: operator=: source width and/or height are zero:0 0
+[ error ] ofxCvGrayscaleImage: operator=: source width and/or height are zero: 0 0
+[warning] ofxCvImage: getPixels(): image not allocated
+[warning] ofxCvImage: getPixels(): image not allocated
+
+
+--------------------------------------- 2018-11-04-18-37-41-027
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[notice ] ofxCvColorImage: setFromPixels(): allocating to match dimensions: 0 0
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[notice ] ofxCvColorImage: setFromPixels(): allocating to match dimensions: 0 0
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[notice ] ofxCvColorImage: setFromPixels(): allocating to match dimensions: 0 0
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[notice ] ofxCvColorImage: setFromPixels(): allocating to match dimensions: 0 0
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[notice ] ofxCvColorImage: setFromPixels(): allocating to match dimensions: 0 0
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[ error ] ofImage: putBmpIntoPixels(): unable to set ofPixels from FIBITMAP
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofxCvImage: allocate(): width and height are zero
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[ error ] ofFbo: width and height have to be more than 0
+[ error ] ofTexture: allocate(): ofTextureData has 0 width and/or height: 0x512
+[ error ] ofFbo: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+[notice ] ofxCvColorImage: setFromPixels(): allocating to match dimensions: 0 0
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[notice ] ofxCvGrayscaleImage: operator=: allocating to match dimensions: 512 512
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-18-46-16-468
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 2048
+[notice ] set capture fbo size to = 2048
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 1024
+[notice ] set capture fbo size to = 1024
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 256
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 512
+[notice ] set capture fbo size to = 1024
+[notice ] set capture fbo size to = 1024
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-18-52-43-717
+[notice ] listenerString 192.168.1. from
+[notice ] listenerString 192.168.1.3 from
+[notice ] listenerString 192.168.1.33 from
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server added new TrackingClient ip: 192.168.1.35 port:  47700 knownClients:  1
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] listenerBool 0 streamingBodyBlob:0 streamingHeadBlob:0 streamingHead:0 streamingEye:0
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-19-06-47-410
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server added new TrackingClient ip: 192.168.1.35 port:  47700 knownClients:  1
+[notice ] Server recvd msg /ks/request/handshake: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/handshake: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/handshake: i:1102 from 192.168.1.35
+[notice ] Server added new TrackingClient ip: 192.168.1.35 port:  1102 knownClients:  2
+[notice ] Server removed TrackingClient ip: 192.168.1.35 port:  47700
+[notice ] Server removed TrackingClient ip: 192.168.1.35 port:  1102
+[notice ] Server recvd msg /ks/request/handshake: i:47700 from 192.168.1.35
+[notice ] Server added new TrackingClient ip: 192.168.1.35 port:  47700 knownClients:  1
+[notice ] Server recvd msg /ks/request/handshake: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/handshake: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server removed TrackingClient ip: 192.168.1.35 port:  47700
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-19-16-17-165
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server added new TrackingClient ip: 192.168.1.35 port:  47700 knownClients:  1
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server removed TrackingClient ip: 192.168.1.35 port:  47700
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server added new TrackingClient ip: 192.168.1.35 port:  47700 knownClients:  1
+[notice ] Server recvd msg /ks/request/handshake: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/handshake: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] listenerBool 1 streamingBodyBlob:1 streamingHeadBlob:0 streamingHead:0 streamingEye:0
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+
+
+--------------------------------------- 2018-11-04-19-30-42-596
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server added new TrackingClient ip: 192.168.1.35 port:  47700 knownClients:  1
+[notice ] Server recvd msg /ks/request/handshake: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/handshake: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] listenerBool 1 streamingBodyBlob:1 streamingHeadBlob:0 streamingHead:0 streamingEye:0
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] listenerBool 0 streamingBodyBlob:0 streamingHeadBlob:0 streamingHead:0 streamingEye:0
+[notice ] Server removed TrackingClient ip: 192.168.1.35 port:  47700
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-19-34-05-579
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server added new TrackingClient ip: 192.168.1.35 port:  47700 knownClients:  1
+[notice ] listenerBool 1 streamingBodyBlob:1 streamingHeadBlob:0 streamingHead:0 streamingEye:0
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server removed TrackingClient ip: 192.168.1.35 port:  47700
+[notice ] Server recvd msg /ks/request/update: i:47700 from 192.168.1.35
+[notice ] Server added new TrackingClient ip: 192.168.1.35 port:  47700 knownClients:  1
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-04-19-38-15-514
+[notice ] exiting application...

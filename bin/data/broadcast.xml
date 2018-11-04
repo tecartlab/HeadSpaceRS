@@ -5,11 +5,11 @@
 		<Port>47500</Port>
 	</Broadcast>
 	<Listening>
-		<IP>192.168.1.35</IP>
+		<IP>192.168.1.33</IP>
 		<Port>47600</Port>
 	</Listening>
 	<Streaming>
-		<bodyBlob>1</bodyBlob>
+		<bodyBlob>0</bodyBlob>
 		<headBlob>0</headBlob>
 		<head>0</head>
 		<eye>0</eye>

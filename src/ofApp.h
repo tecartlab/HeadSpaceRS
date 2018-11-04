@@ -131,7 +131,6 @@ class ofApp : public ofBaseApp{
     ofEasyCam previewCam;
     
 	ofShader shader;
-	ofImage img;
 
     ///////////////
     //CALCUALTION//

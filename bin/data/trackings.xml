@@ -24,4 +24,9 @@
 		<Use_gaze_point>0</Use_gaze_point>
 		<Gaze_point>0, 0, 1500</Gaze_point>
 	</Gazing>
+	<Quality>
+		<Smoothing>0.5</Smoothing>
+		<BreathSize>30</BreathSize>
+		<MaxDistance>400</MaxDistance>
+	</Quality>
 </Tracking___>

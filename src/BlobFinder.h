@@ -47,7 +47,7 @@ public:
     
     void drawGazePoint();
 
-    vector <BlobTracker> trackedBlobs;
+    vector <BlobTracker> blobEvents;
     
     ofVec2f captureScreenSize;
     
@@ -119,7 +119,7 @@ public:
     ofParameter<ofVec3f> gazePoint;
     ofSpherePrimitive gazePointer;
 
-    ofParameter<int> smoothOffset;
+    ofParameter<int> eventBreathSize;
     ofParameter<float> smoothFactor;
 
     ofVboMesh sensorBox;

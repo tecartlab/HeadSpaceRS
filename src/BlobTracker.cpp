@@ -8,70 +8,83 @@
 
 #include "BlobTracker.h"
 
-BlobTracker::BlobTracker(ofRectangle _rect){
+BlobTracker::BlobTracker(int _ID, ofRectangle _rect, int _liveSpan){
+	mID = _ID;
     baseRectangle2d = _rect;
-	newBaseRectangle2d = _rect;
-	trackerSize = 5;
     headBlob.setResolution(1, 1);
-    lastUpdateFrame = 0;
-    isDead = false;
+	mBreathSize = _liveSpan;
+	mCountDown = mBreathSize;
+    mIsDying = false;
 	mLifeCycles = ofGetElapsedTimeMillis();
+	hasBeenMatched = false;
 }
 
-bool BlobTracker::isAlive(){
-    if(lastUpdateFrame > N_EMPTYFRAMES || isDead)
-        return false;
-    return true;
+void BlobTracker::updatePrepare()
+{
+	hasBodyUpdated = false;
+	hasHeadUpdated = false;
+	hasBeenMatched = false;
+	mCountDown--;
 }
 
-bool BlobTracker::finder(ofRectangle _rect){
-    if(baseRectangle2d.inside(_rect.getCenter()) || glm::distance(baseRectangle2d.getCenter() , _rect.getCenter()) <(baseRectangle2d.getPerimeter() / 4.))
-        return true;
+bool BlobTracker::isMatching(ofRectangle _rect){
+	if (!mIsDying && !hasBeenMatched) {
+		if (baseRectangle2d.inside(_rect.getCenter()) || glm::distance(baseRectangle2d.getCenter(), _rect.getCenter()) < (baseRectangle2d.getPerimeter() / 4.)) {
+			hasBeenMatched = true;
+			return true;
+		}
+	}
     return false;
 }
 
-void BlobTracker::updateStart(){
-    lastUpdateFrame++;
-    hasBodyUpdated = false;
-    hasHeadUpdated = false;
+void BlobTracker::updateBody(ofRectangle _rect, glm::vec3 _bodyBlobCenter, glm::vec2 _bodyBlobSize, glm::vec3 _headTop, glm::vec3 _headCenter, float _eyelevel, float _smoothPos){
+ 	bodyBlobCenter = (1 - _smoothPos) * _bodyBlobCenter + bodyBlobCenter * _smoothPos;
+	bodyBlobSize = (1 - _smoothPos) * _bodyBlobSize + bodyBlobSize * _smoothPos;
+	headTop = (1 - _smoothPos) * _headTop + headTop * _smoothPos;
+	headCenter = (1 - _smoothPos) * _headCenter + headCenter * _smoothPos;
+	eyeLevel = _eyelevel;
+	hasBodyUpdated = true;
 }
 
-void BlobTracker::updateBody(ofRectangle _rect, ofVec3f _bodyBlobCenter, ofVec2f _bodyBlobSize, ofVec3f _headTop, ofVec3f _headCenter, float _eyelevel){
-    if(!hasBodyUpdated){
-        newBaseRectangle2d = _rect;
-        tracker.insert(tracker.begin(), TrackedBlob());
-        
-        tracker[0].bodyBlobCenter = _bodyBlobCenter;
-        tracker[0].bodyBlobSize = _bodyBlobSize;
-        tracker[0].headTop = _headTop;
-        tracker[0].headCenter = _headCenter;
-        
-        eyeLevel = _eyelevel;
-//       headCenter = ofVec3f(headTop.x, headTop.y, headTop.z - eyeLevel);
-    } else {
-        // this means the previous blob was split up.
-        if(tracker.size() > 0 && tracker[0].headTop.z < _headTop.z){ //if this new blob is higher then take it
-            
-            tracker[0].bodyBlobCenter = _bodyBlobCenter;
-            tracker[0].bodyBlobSize = _bodyBlobSize;
-            tracker[0].headTop = _headTop;
-            tracker[0].headCenter = _headCenter;
+void BlobTracker::updateHead(glm::vec3 _headBlobCenter, glm::vec2 _headBlobSize, glm::vec3 _eyeCenter, float _smoothPos) {
+	headBlobCenter = (1 - _smoothPos) * _headBlobCenter + headBlobCenter * _smoothPos;
+	headBlobSize = (1 - _smoothPos) * _headBlobSize + headBlobSize * _smoothPos;
+	eyeCenter = (1 - _smoothPos) * _eyeCenter + eyeCenter * _smoothPos;
+	hasHeadUpdated = true;
+}
 
-            eyeLevel = _eyelevel;
+void BlobTracker::updateEnd(glm::vec3 _kinectPos, int _smoothOffset, float _smoothFactor) {
+	if (hasBodyUpdated && hasHeadUpdated) {
+		eyeGaze = glm::normalize(headCenter - eyeCenter);
+		valid = true;
+	}
+	else {
+		valid = false;
+	}
+}
 
-//            headCenter = ofVec3f(headTop.x, headTop.y, headTop.z - eyeLevel);
-            
-            // but keep the old rectangle
-            newBaseRectangle2d = baseRectangle2d;
-        }
-    }
-    
-    hasBodyUpdated = true;
+bool BlobTracker::isAlive()
+{
+	canBeDisposed();
+	return !mIsDying;
+}
+
+bool BlobTracker::isDying() {
+	return mIsDying;
+}
+
+bool BlobTracker::canBeDisposed() {
+	return canBeDisposed(false);
+}
+
+bool BlobTracker::canBeDisposed(bool _forceDisposal) {
+	if (mCountDown == 0) {
+		mIsDying = true;
+	}
+	return (mCountDown < 0) ? true : false;
 }
 
 ofVec3f BlobTracker::getCurrentHeadCenter(){
-    if(tracker.size() > 0)
-        return tracker[0].headCenter;
     return headCenter;
 }
 
@@ -79,76 +92,6 @@ int BlobTracker::getElapsedMillis()
 {
 	return ofGetElapsedTimeMillis() - mLifeCycles;
 }
-
-void BlobTracker::updateHead(ofVec3f _headBlobCenter, ofVec2f _headBlobSize, ofVec3f _eyeCenter){
-    if(!hasHeadUpdated){
-        tracker[0].headBlobCenter = _headBlobCenter;
-        tracker[0].headBlobSize = _headBlobSize;
-        tracker[0].eyeCenter = _eyeCenter;
-    } else {
-        // this means the previous blob was split up.
-        if(tracker.size() > 0 && tracker[0].headBlobCenter.z < _headBlobCenter.z){ //if this new blob is higher then take it
-            tracker[0].headBlobCenter = _headBlobCenter;
-            tracker[0].headBlobSize = _headBlobSize;
-            tracker[0].eyeCenter = _eyeCenter;
-        }
-    }
-    
-    hasHeadUpdated = true;
-}
-
-void BlobTracker::updateEnd(ofVec3f _kinectPos, int _smoothOffset, float _smoothFactor){
-    if(hasBodyUpdated && hasHeadUpdated){
-        ofVec3f kinect = _kinectPos - headCenter;
-        float dist = kinect.length();
-        trackerSize = _smoothOffset + (int) (dist / 1000. * _smoothFactor);
-        while(tracker.size() > trackerSize)
-            tracker.pop_back();
-        
-        baseRectangle2d = newBaseRectangle2d;
-
-        bodyBlobCenter = ofVec3f();
-        bodyBlobSize = ofVec3f();
-        headTop = ofVec3f();
-        headCenter = ofVec3f();
-        headBlobCenter = ofVec3f();
-        headBlobSize = ofVec3f();
-        eyeCenter = ofVec3f();
-        
-        for (int i = 0; i < tracker.size(); i++){
-            bodyBlobCenter += tracker[i].bodyBlobCenter;
-            bodyBlobSize += tracker[i].bodyBlobSize;
-            headTop += tracker[i].headTop;
-            headCenter += tracker[i].headCenter;
-            headBlobCenter += tracker[i].headBlobCenter;
-            headBlobSize += tracker[i].headBlobSize;
-            eyeCenter += tracker[i].eyeCenter;
-        }
-        
-        bodyBlobCenter /= tracker.size();
-        bodyBlobSize /= tracker.size();
-        headTop /= tracker.size();
-        headCenter /= tracker.size();
-        headBlobCenter /= tracker.size();
-        headBlobSize /= tracker.size();
-        eyeCenter /= tracker.size();
-        
-        //headCenter = ofVec3f(headTop.x, headTop.y, headBlobCenter.z);
-
-        eyeGaze = (headCenter - eyeCenter).normalize();
-        
-        lastUpdateFrame = 0;
-        valid = true;
-    } else {
-        valid = false;
-    }
-}
-
-void BlobTracker::kill(){
-    isDead = true;
-    valid = false;
-}
-    
 
 void BlobTracker::drawBodyBox(){
     //ofLog(OF_LOG_NOTICE, "bodyBox.size : " + ofToString(bodyBox.getSize()));

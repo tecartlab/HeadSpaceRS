@@ -21,17 +21,25 @@
 class BlobTracker {
     
 public:
-    BlobTracker(ofRectangle _rect);
+    BlobTracker(int _ID, ofRectangle _rect, int _liveSpan);
     
-    bool isAlive();
-    void kill();
+	// returns true if the event is alive
+	bool isAlive();
+
+	// returns true if this is the last lifecycle
+    bool isDying();
+
+	// returns true if this event is dead and can be removed
+	bool canBeDisposed();
+	bool canBeDisposed(bool _forceDisposal);
+
+	// return true if it matches and is not dying and hasn't been matched before.
+    bool isMatching(ofRectangle _rect);
     
-    bool finder(ofRectangle _rect);
-    
-    void updateStart();
-    void updateBody(ofRectangle _rect, ofVec3f _bodyBlobCenter, ofVec2f _bodyBlobSize, ofVec3f _headTop, ofVec3f _headCenter, float _eyelevel);
-    void updateHead(ofVec3f _headBlobCenter, ofVec2f _headBlobSize, ofVec3f _eyeCenter);
-    void updateEnd(ofVec3f _kinectPos, int _smoothOffset, float _smoothFactor);
+    void updatePrepare();
+    void updateBody(ofRectangle _rect, glm::vec3 _bodyBlobCenter, glm::vec2 _bodyBlobSize, glm::vec3 _headTop, glm::vec3 _headCenter, float _eyelevel, float _smoothPos);
+    void updateHead(glm::vec3 _headBlobCenter, glm::vec2 _headBlobSize, glm::vec3 _eyeCenter, float _smoothPos);
+    void updateEnd(glm::vec3 _kinectPos, int _smoothOffset, float _smoothFactor);
     
     ofVec3f getCurrentHeadCenter();
 
@@ -44,12 +52,25 @@ public:
     
     bool hasBodyUpdated;
     bool hasHeadUpdated;
+	bool hasBeenMatched;
 
     bool valid;
     
-    bool isDead;
+    bool mIsDying;
     
     int sortPos;
+
+	// this event ID
+	int mID;
+
+	// the number of frames this event survives without any blob match
+	int mBreathSize;
+
+	// the number of frames left until this event dies
+	int mCountDown;
+
+	// livetime in milliseconds
+	int mLifeCycles;
 
     ofBoxPrimitive bodyBox;
     ofPlanePrimitive headBlob;
@@ -59,32 +80,25 @@ public:
     ofSpherePrimitive eyeCenterSphere;
     
     ofRectangle baseRectangle2d;
-    ofRectangle newBaseRectangle2d;
     
-    ofVec3f     bodyBlobCenter;
-    ofVec2f     bodyBlobSize;
+	glm::vec3     bodyBlobCenter;
+	glm::vec2     bodyBlobSize;
     
-    ofVec3f     headTop;
+	glm::vec3     headTop;
 
-    ofVec3f     headCenter;
+	glm::vec3     headCenter;
 
-    ofVec3f     headBlobCenter;
-    ofVec2f     headBlobSize;
+	glm::vec3     headBlobCenter;
+	glm::vec2     headBlobSize;
     
-    ofVec3f     eyeCenter;
+	glm::vec3     eyeCenter;
     
-    ofVec3f     eyeGaze;
+	glm::vec3     eyeGaze;
     
     float       eyeLevel;
- 
-    int trackerSize;
-    vector <TrackedBlob> tracker;
-    
+     
     ofVboMesh contourMesh;
     vector <ofVec3f> countour;
-
-    int lastUpdateFrame;
-	int mLifeCycles;
     
 };
 

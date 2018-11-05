@@ -6,3 +6,4 @@ x64/
 *.exp
 bin/HeadSpaceRS.ipdb
 bin/HeadSpaceRS.iobj
+*.bag

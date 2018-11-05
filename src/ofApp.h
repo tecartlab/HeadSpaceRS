@@ -114,9 +114,17 @@ class ofApp : public ofBaseApp{
     CaptureMeshArray capMesh;
     
     Frustum realSenseFrustum;
-    
+	
+	/**
+	Changes operation of application
+	@param _index 0=normal, 1= recording to file, 2=playback from file
+	*/
+	void changeOperation(int& _index);
+
     void drawPreview();
     void drawCapturePointCloud();
+
+	void createGUIDeviceParams();
 
     void createFrustumCone();
     void updateFrustumCone(int & value);
@@ -133,7 +141,7 @@ class ofApp : public ofBaseApp{
 	ofShader shader;
 
     ///////////////
-    //CALCUALTION//
+    //CALCULATION//
     ///////////////
     void updateCalc();
     void updateMatrix();
@@ -183,6 +191,15 @@ class ofApp : public ofBaseApp{
 	ofxGuiPanel *device;
 	ofxGuiPanel *post;
 	ofxGuiPanel *guitransform;
+	ofxGuiPanel *operating;
+
+	//mode panel
+	ofxGuiGroup *operatingToggles;
+
+	ofParameterGroup operatingModes;
+	ofParameter<bool> mode0Capture;
+	ofParameter<bool> mode1Record;
+	ofParameter<bool> mode2Playback;
 
     ofParameter<ofVec2f> calibPoint_X;
     ofParameter<ofVec2f> calibPoint_Y;

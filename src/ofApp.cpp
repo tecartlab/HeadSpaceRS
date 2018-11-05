@@ -86,6 +86,7 @@ void ofApp::setup(){
 
 	post->loadFromFile("postprocessing.xml");
 
+
     /////////////////////////////
     //CALIBRATION GUI   SETUP //
     ////////////////////////////
@@ -95,8 +96,7 @@ void ofApp::setup(){
     setupCalib->loadTheme("theme/theme_light.json");
     setupCalib->setName("Calibration Panel");
     
-    setupCalib->add(captureVideo.set("use video", true));
-    setupCalib->add(blobGrain.set("Grain", 2, 1, 4));
+    setupCalib->add(blobGrain.set("Grain", 2, 1, 10));
 
     setupCalib->add(calibPoint_X.set("calibrationPoint_X", ofVec2f(REALSENSE_VIDEO_WIDTH / 2, REALSENSE_VIDEO_HEIGHT / 2), ofVec2f(0, 0), ofVec2f(REALSENSE_VIDEO_WIDTH, REALSENSE_VIDEO_HEIGHT)));
     setupCalib->add(calibPoint_Y.set("calibrationPoint_Y", ofVec2f(REALSENSE_VIDEO_WIDTH / 2, REALSENSE_VIDEO_HEIGHT / 2), ofVec2f(0, 0), ofVec2f(REALSENSE_VIDEO_WIDTH, REALSENSE_VIDEO_HEIGHT)));
@@ -113,38 +113,6 @@ void ofApp::setup(){
     //setupCalib->add(transformation.set("matrix rx ry tz", ofVec3f(0, 0, 0), ofVec3f(-90, -90, -6000), ofVec3f(90, 90, 6000)));
  
     setupCalib->loadFromFile("settings.xml");
-
-    ////////////////////
-    //RealSense       // -> It needs to be after the GUI SETUP but before GUI DEVICE
-    ////////////////////
-    
-	realSense->start();
-
-	std:string kinectSerialID = "noID";
-        
-    ////////////////////
-    //   GUI   DEVICE //
-    ////////////////////
-
-	device = gui.addPanel();
-    
-	device->loadTheme("theme/theme_light.json");
-	device->setName("RealSense Device");
-	device->add<ofxGuiLabel>(realSense->getSerialNumber(-1));
-
-    intrinsicGuiGroup.setName("Settings");
-	intrinsicGuiGroup.add(realSense->param_deviceLaser);
-	intrinsicGuiGroup.add(realSense->param_deviceLaser_mag);
-	intrinsicGuiGroup.add(realSense->param_deviceAutoExposure);
-	intrinsicGuiGroup.add(realSense->param_deviceExposure_mag);
-	intrinsicGuiGroup.add(realSense->param_deviceGain_mag);
-	intrinsicGuiGroup.add(realSense->param_deviceFrameQueSize_mag);
-	intrinsicGuiGroup.add(realSense->param_deviceAsicTemparature);
-	intrinsicGuiGroup.add(realSense->param_deviceProjectorTemparature);
-
-	device->addGroup(intrinsicGuiGroup);
-
-    device->loadFromFile(realSense->getSerialNumber(-1) + ".xml");
 
 	////////////////////////////
 	//   GUI   Transfromation //
@@ -166,8 +134,43 @@ void ofApp::setup(){
 
 	guitransform->setVisible(invisible);
 
-    updateMatrix();
+	updateMatrix();
 
+	/////////////////////////////
+	//   GUI   DEVICE PARAMS   //
+	/////////////////////////////
+
+	device = gui.addPanel();
+
+	/////////////////////////////
+	//   OPERATING GUI         //
+	/////////////////////////////
+
+	operating = gui.addPanel();
+	operating->loadTheme("theme/theme_light.json");
+	operating->setName("Operating");
+
+	operatingModes.setName("Modes");
+	operatingModes.add(mode0Capture.set("normal", false));
+	operatingModes.add(mode1Record.set("recording", false));
+	operatingModes.add(mode2Playback.set("playback", false));
+
+	operatingToggles = operating->addGroup(operatingModes);
+	operatingToggles->setExclusiveToggles(true);
+	operatingToggles->setConfig(ofJson({ {"type", "radio"} }));
+
+	operatingToggles->setActiveToggle(0);
+	operatingToggles->getActiveToggleIndex().addListener(this, &ofApp::changeOperation);	
+
+    ////////////////////////
+    //    RealSense       // 
+    ////////////////////////
+    
+	// firing up the device, creating the GUI and loading the device parameters
+	if (realSense->capture()) {
+		createGUIDeviceParams();
+	}
+     
     /////////////////
 	// creating preview point cloud is bogging the system down, so switched off at startup
 	bPreviewPointCloud = false;
@@ -183,7 +186,6 @@ void ofApp::setup(){
     
     capMesh.reSize(4);
     
-    
     ofSetLogLevel(OF_LOG_NOTICE);
     
     ofLogToFile("myLogFile.txt", true);
@@ -193,6 +195,49 @@ void ofApp::setup(){
 	}
 }
 
+void ofApp::changeOperation(int& _index) {
+
+	switch (_index) {
+	case 0:
+		if (realSense->capture()) {
+			createGUIDeviceParams();
+			setupViewports();
+		}
+		break;
+	case 1:
+		if (realSense->record()) {
+			createGUIDeviceParams();
+			setupViewports();
+		}
+		break;
+	case 2:
+		if (realSense->playback()) {
+		}
+		break;
+	}
+}
+
+void ofApp::createGUIDeviceParams() {
+	device->clear();
+	device->loadTheme("theme/theme_light.json");
+	device->setName("RealSense Device");
+	device->add<ofxGuiLabel>(realSense->getSerialNumber(-1));
+
+	intrinsicGuiGroup.clear();
+	intrinsicGuiGroup.setName("Settings");
+	intrinsicGuiGroup.add(realSense->param_deviceLaser);
+	intrinsicGuiGroup.add(realSense->param_deviceLaser_mag);
+	intrinsicGuiGroup.add(realSense->param_deviceAutoExposure);
+	intrinsicGuiGroup.add(realSense->param_deviceExposure_mag);
+	intrinsicGuiGroup.add(realSense->param_deviceGain_mag);
+	intrinsicGuiGroup.add(realSense->param_deviceFrameQueSize_mag);
+	intrinsicGuiGroup.add(realSense->param_deviceAsicTemparature);
+	intrinsicGuiGroup.add(realSense->param_deviceProjectorTemparature);
+
+	device->addGroup(intrinsicGuiGroup);
+
+	device->loadFromFile(realSense->getSerialNumber(-1) + ".xml");
+}
 
 //--------------------------------------------------------------
 void ofApp::setupViewports(){
@@ -203,9 +248,11 @@ void ofApp::setupViewports(){
 	setupCalib->setWidth(MENU_WIDTH / 4);
 	blobFinder.panel->setWidth(MENU_WIDTH / 4);
 	networkMng.panel->setWidth(MENU_WIDTH / 4);
+	operating->setWidth(MENU_WIDTH / 4);
 
 	device->setPosition(ofGetWidth() - MENU_WIDTH, 20);
 	post->setPosition(ofGetWidth() - MENU_WIDTH, 400);
+	operating->setPosition(ofGetWidth() - MENU_WIDTH, 800);
 	setupCalib->setPosition(ofGetWidth() - MENU_WIDTH / 4 * 3, 20);
 	blobFinder.panel->setPosition(ofGetWidth() - MENU_WIDTH / 4 * 2, 20);
 	networkMng.panel->setPosition(ofGetWidth() - MENU_WIDTH / 4, 20);

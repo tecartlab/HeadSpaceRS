@@ -1120,3 +1120,247 @@
 
 --------------------------------------- 2018-11-04-19-38-15-514
 [notice ] exiting application...
+
+
+--------------------------------------- 2018-11-05-10-06-29-580
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+[ error ] ofxOscSender: couldn't create sender to 192.168.1.255 on port 47500: unable to connect udp socket
+[ error ] ofxOscSender: trying to send with empty socket
+
+
+--------------------------------------- 2018-11-05-10-17-38-123
+
+
+--------------------------------------- 2018-11-05-10-22-54-126
+[notice ] listenerBool 1 streamingBodyBlob:0 streamingHeadBlob:1 streamingHead:0 streamingEye:0
+[notice ] listenerBool 1 streamingBodyBlob:1 streamingHeadBlob:1 streamingHead:0 streamingEye:0
+[notice ] listenerBool 0 streamingBodyBlob:0 streamingHeadBlob:1 streamingHead:0 streamingEye:0
+[notice ] set capture fbo size to = 1024
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-05-11-40-27-147
+
+
+--------------------------------------- 2018-11-05-11-42-37-613
+[notice ] set capture fbo size to = 1024
+[notice ] set capture fbo size to = 512
+[notice ] exiting application...
+
+
+--------------------------------------- 2018-11-05-19-58-47-985
+
+
+--------------------------------------- 2018-11-05-20-06-31-265
+
+
+--------------------------------------- 2018-11-05-20-13-58-392
+
+
+--------------------------------------- 2018-11-05-20-16-51-699
+
+
+--------------------------------------- 2018-11-05-20-18-16-974
+
+
+--------------------------------------- 2018-11-05-20-19-16-006
+
+
+--------------------------------------- 2018-11-05-20-22-02-903
+[notice ] set capture fbo size to = 512
+[notice ] exiting application...

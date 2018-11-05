@@ -5,17 +5,17 @@
 		<DistanceFac_>1</DistanceFac_>
 	</NoiseReduction>
 	<SensorBox>
-		<left>-51</left>
-		<right>2034</right>
-		<front>2051</front>
-		<back>897</back>
-		<top>1987</top>
-		<bottom>1320</bottom>
+		<left>-1000</left>
+		<right>5000</right>
+		<front>-3500</front>
+		<back>3500</back>
+		<top>2000</top>
+		<bottom>1200</bottom>
 	</SensorBox>
 	<Blobs>
-		<AreaMin>1000</AreaMin>
-		<AreaMax>25854</AreaMax>
-		<MaxBlobs>5</MaxBlobs>
+		<AreaMin>1585</AreaMin>
+		<AreaMax>46696</AreaMax>
+		<MaxBlobs>11</MaxBlobs>
 	</Blobs>
 	<Gazing>
 		<Gaze_Point>0, 0, 1500</Gaze_Point>
@@ -25,8 +25,8 @@
 		<Gaze_point>0, 0, 1500</Gaze_point>
 	</Gazing>
 	<Quality>
-		<Smoothing>0.5</Smoothing>
+		<Smoothing>0</Smoothing>
 		<BreathSize>30</BreathSize>
-		<MaxDistance>400</MaxDistance>
+		<MaxDistance>70</MaxDistance>
 	</Quality>
 </Tracking___>

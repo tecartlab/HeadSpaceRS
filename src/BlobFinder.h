@@ -82,7 +82,8 @@ public:
     
     ofxCvColorImage colorImg;
     
-    ofxCvGrayscaleImage grayImage; // grayscale depth image
+	ofxCvGrayscaleImage blobRef; // body blob reference image
+	ofxCvGrayscaleImage grayImage; // grayscale depth image
     ofxCvGrayscaleImage grayEyeLevel; // the eyelevel thresholded image
     ofxCvGrayscaleImage grayThreshFar; // the far thresholded image
  

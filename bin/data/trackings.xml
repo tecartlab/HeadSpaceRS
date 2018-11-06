@@ -13,7 +13,7 @@
 		<bottom>1200</bottom>
 	</SensorBox>
 	<Blobs>
-		<AreaMin>1585</AreaMin>
+		<AreaMin>660</AreaMin>
 		<AreaMax>46696</AreaMax>
 		<MaxBlobs>11</MaxBlobs>
 	</Blobs>
@@ -25,8 +25,8 @@
 		<Gaze_point>0, 0, 1500</Gaze_point>
 	</Gazing>
 	<Quality>
-		<Smoothing>0</Smoothing>
-		<BreathSize>30</BreathSize>
+		<Smoothing>0.986784</Smoothing>
+		<BreathSize>8</BreathSize>
 		<MaxDistance>70</MaxDistance>
 	</Quality>
 </Tracking___>

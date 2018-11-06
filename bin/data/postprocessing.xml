@@ -9,7 +9,7 @@
 	<spatial_smoothDelta>7</spatial_smoothDelta>
 	<spatial_magnitude>2</spatial_magnitude>
 	<use_temporal_Filter>1</use_temporal_Filter>
-	<temporal_smoothAlpha>0.123967</temporal_smoothAlpha>
-	<temporal_smoothDelta>22</temporal_smoothDelta>
-	<temporal_persistency>3</temporal_persistency>
+	<temporal_smoothAlpha>0.85124</temporal_smoothAlpha>
+	<temporal_smoothDelta>90</temporal_smoothDelta>
+	<temporal_persistency>6</temporal_persistency>
 </PostProcessing>

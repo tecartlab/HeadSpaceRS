@@ -70,6 +70,7 @@ void BlobFinder::allocate(int &value){
     
 	colorImg.allocate(captureScreenSize.x, captureScreenSize.y);
     
+	blobRef.allocate(captureScreenSize.x, captureScreenSize.y);
 	grayImage.allocate(captureScreenSize.x, captureScreenSize.y);
 	grayEyeLevel.allocate(captureScreenSize.x, captureScreenSize.y);
 	grayThreshFar.allocate(captureScreenSize.x, captureScreenSize.y);
@@ -222,8 +223,10 @@ void BlobFinder::update(){
     //grayImage.blurHeavily();
     
     grayEyeLevel = grayImage;
+
+	ofPixelsRef blobRefPixls = blobRef.getPixels();
     
-    ofPixelsRef eyeRef = grayEyeLevel.getPixels();
+	ofPixelsRef eyeRef = grayEyeLevel.getPixels();
     ofPixelsRef greyref = grayImage.getPixels();
     ofColor white = ofColor::white;
     ofColor black = ofColor::black;
@@ -250,8 +253,7 @@ void BlobFinder::update(){
 					  FIND BODY CONTOURS
 	*****************************************************************/
 
-    // find contours in the raw grayImage
-    contourFinder.findContours(grayImage, blobAreaMin.get(), blobAreaMax.get(), countBlob.get(), false);
+	contourFinder.findContours(grayImage, blobAreaMin.get(), blobAreaMax.get(), countBlob.get(), false);
 
     for (int i = 0; i < contourFinder.nBlobs; i++){
         ofRectangle bounds = contourFinder.blobs[i].boundingRect;
@@ -296,7 +298,7 @@ void BlobFinder::update(){
                 pixelBrightness = greyref.getColor(x, y).getBrightness();
                 if(pixelBrightness > (brightness - eyeLevelColor)){
                     //writes the pixels above the eyelevel into the eyeRef image
-                    eyeRef.setColor(x, y, white);
+                    eyeRef.setColor(x, y, brightness);
                 }else{
                     eyeRef.setColor(x, y, black);
                 }
@@ -317,7 +319,7 @@ void BlobFinder::update(){
 		/****************************************************************
 				  UPDATE BODY EVENTS
 		*****************************************************************/
-
+		/*
         // try finding a matching trackedBlob
         bool foundBlob = false;
         for(int i = 0; i < blobEvents.size(); i++){
@@ -333,13 +335,15 @@ void BlobFinder::update(){
             blobEvents.push_back(BlobTracker(minID, bounds, eventBreathSize.get()));
             blobEvents.back().updateBody(bounds, blobPos, blobSize, headTop, headCenter, eyeLevel.get(), smoothFactor.get());
         }
-    }
+		*/
+	}
 
 	/****************************************************************
 		  CLEAN UP BODY EVENTS
 	*****************************************************************/
 
     //checks for double blobs and kills the lower ones.
+	/*
     if( blobEvents.size() > 1 )
     {
         for(int i = 0; i < (blobEvents.size() - 1); i++){
@@ -357,10 +361,11 @@ void BlobFinder::update(){
 
 	//updates all alive blobs and removes all the blobs that havent had an update for a specific number of frames or have been killed
 	for (int e = blobEvents.size() - 1; e >= 0; e--) {
-		if (blobEvents[e].checkForDisposal()) {
+		if (!blobEvents[e].hasBeenMatched()) {
 			blobEvents.erase(blobEvents.begin() + e);
 		}
 	}
+	*/
 
 	/****************************************************************
 				  FIND HEAD CONTOURS
@@ -368,69 +373,84 @@ void BlobFinder::update(){
 
     //preprocesses the eyeRef image
     //grayEyeLevel.setFromPixels(eyeRef.getPixels(), eyeRef.getWidth(), eyeRef.getHeight());
-    grayEyeLevel.invert();
-    grayEyeLevel.threshold(20);
-    grayEyeLevel.invert();
-    grayEyeLevel.blurGaussian();
+    //grayEyeLevel.invert();
+    //grayEyeLevel.threshold(20);
+    //grayEyeLevel.invert();
+    //grayEyeLevel.blurGaussian();
 
     //ofLog(OF_LOG_NOTICE, "contourEyeFinder nBlobs : " + ofToString(contourEyeFinder.nBlobs));
-
 
     //find head shape on eye height contours
     contourEyeFinder.findContours(grayEyeLevel, blobAreaMin.get()/4, blobAreaMax.get(), countBlob.get(), false);
     for(int i = 0; i < contourEyeFinder.nBlobs; i++){
-        ofRectangle bounds = contourEyeFinder.blobs[i].boundingRect;
+
+		ofRectangle bounds = contourEyeFinder.blobs[i].boundingRect;
+
+		//calculate the blob pos in worldspace
+		ofVec3f headBlobCenter = ofVec3f(((float)bounds.getCenter().x / captureScreenSize.x) * sensorFieldWidth + sensorFieldLeft, sensorFieldBack - ((float)bounds.getCenter().y / captureScreenSize.y) * sensorFieldDepth, 2.0);
+
+		//calculate the blob size in worldspace
+		ofVec2f headBlobSize = ofVec2f(((float)bounds.getWidth() / captureScreenSize.x) * sensorFieldWidth, ((float)bounds.getHeight() / captureScreenSize.y) * sensorFieldDepth);
+
+		//calculate the gazeVector
+		//ofVec3f gaze = blobEvents[bid].getCurrentHeadCenter() - gazePoint.get();
+
+		//gaze.z = 0;
+
+		float smalestAngle = 180;
+		ofVec3f eyePoint = headBlobCenter;
+		/*
+
+		//clears the contour storage
+		blobEvents[bid].countour.clear();
+
+		// findes the closest contour point to the eyegave-vector, takes its distance to the headCenter and calculated
+		// the eye - center - point
+		for (int v = 0; v < contourEyeFinder.blobs[i].pts.size(); v++) {
+			ofVec3f headPoint = ofVec3f(((float)contourEyeFinder.blobs[i].pts[v].x / captureScreenSize.x) * sensorFieldWidth + sensorFieldLeft, sensorFieldBack - ((float)contourEyeFinder.blobs[i].pts[v].y / captureScreenSize.y) * sensorFieldDepth, blobEvents[bid].headCenter.z);
+
+			blobEvents[bid].countour.push_back(headPoint);
+
+			ofVec3f gaze2 = blobEvents[bid].getCurrentHeadCenter() - headPoint;
+
+			float angle = gaze.angle(gaze2);
+
+			if (smalestAngle > angle) {
+				smalestAngle = angle;
+				eyePoint = blobEvents[bid].getCurrentHeadCenter() - gaze.normalize().scale(gaze2.length() * eyeInset.get());
+			}
+		}
+		*/
+
+		bool foundBlob = false;
+
         for(int bid = 0; bid < blobEvents.size(); bid++){
             // find the blob
-            if(blobEvents[bid].isMatching(bounds, eventMaxSize.get())){
-                
-                //calculate the blob pos in worldspace
-                ofVec3f headBlobCenter = ofVec3f(((float)bounds.getCenter().x / captureScreenSize.x) * sensorFieldWidth + sensorFieldLeft, sensorFieldBack - ((float)bounds.getCenter().y / captureScreenSize.y ) * sensorFieldDepth, blobEvents[bid].headCenter.z);
-                
-                //calculate the blob size in worldspace
-                ofVec2f headBlobSize = ofVec2f(((float)bounds.getWidth() / captureScreenSize.x) * sensorFieldWidth, ((float)bounds.getHeight() / captureScreenSize.y ) * sensorFieldDepth);
-            
-                //calculate the gazeVector
-                ofVec3f gaze = blobEvents[bid].getCurrentHeadCenter() - gazePoint.get();
-                
-                gaze.z = 0;
-                
-                float smalestAngle = 180;
-                ofVec3f eyePoint;
-                
-                //clears the contour storage
-                blobEvents[bid].countour.clear();
-                
-                // findes the closest contour point to the eyegave-vector, takes its distance to the headCenter and calculated
-                // the eye - center - point
-                for(int v = 0; v < contourEyeFinder.blobs[i].pts.size(); v++){
-                    ofVec3f headPoint = ofVec3f(((float)contourEyeFinder.blobs[i].pts[v].x / captureScreenSize.x) * sensorFieldWidth + sensorFieldLeft, sensorFieldBack - ((float)contourEyeFinder.blobs[i].pts[v].y / captureScreenSize.y ) * sensorFieldDepth, blobEvents[bid].headCenter.z);
-                    
-                    blobEvents[bid].countour.push_back(headPoint);
-                    
-                    ofVec3f gaze2 = blobEvents[bid].getCurrentHeadCenter() - headPoint;
-                    
-                    float angle = gaze.angle(gaze2);
-                    
-                    if(smalestAngle > angle){
-                        smalestAngle = angle;
-                        eyePoint = blobEvents[bid].getCurrentHeadCenter() - gaze.normalize().scale(gaze2.length() * eyeInset.get());
-                    }
-                }
-        
+            if(!blobEvents[bid].hasBeenMatched() && blobEvents[bid].isMatching(bounds, eventMaxSize.get())){
+               
 				/****************************************************************
 						  UPDATE HEAD EVENTS
 				*****************************************************************/
 
 				blobEvents[bid].updateHead(headBlobCenter, headBlobSize, eyePoint, smoothFactor.get());
+				blobEvents[bid].setAsMatched();
+				foundBlob = true;
+				break;
             }
         }
+		// if none is found, create a new one.
+		if (!foundBlob) {
+			blobEvents.push_back(BlobTracker(minID, bounds, eventBreathSize.get()));
+			blobEvents.back().updateHead(headBlobCenter, headBlobSize, eyePoint, smoothFactor.get());
+		}
+
     }
 
 	/****************************************************************
 		  SORT EVENTS
 	*****************************************************************/
 
+	/*
 	//sets the sort value to the current index.
 	int sortPos = 0;
 
@@ -461,6 +481,7 @@ void BlobFinder::update(){
 			}
 		}
 	}
+	*/
 
  
 	/****************************************************************
@@ -481,8 +502,11 @@ void BlobFinder::drawBodyBlobs2d(ofRectangle _rect){
     
     ofNoFill();
     for(int i = 0; i < blobEvents.size(); i++){
-        ofDrawRectangle(_rect.x + blobEvents[i].baseRectangle2d.x * xFactor, _rect.y + blobEvents[i].baseRectangle2d.y * yFactor, blobEvents[i].baseRectangle2d.width * xFactor, blobEvents[i].baseRectangle2d.height * yFactor);
-        ofDrawBitmapString("blob[" + ofToString(blobEvents[i].mID) + "]\n alive = " + ofToString(blobEvents[i].getElapsedMillis()) + "\n sort = " + ofToString(blobEvents[i].sortPos) + "\n x = " + ofToString(blobEvents[i].headTop.x) + "\n y = " + ofToString(blobEvents[i].headTop.y) + "\n z = " + ofToString(blobEvents[i].headTop.z), _rect.x + blobEvents[i].baseRectangle2d.getCenter().x * xFactor, _rect.y + blobEvents[i].baseRectangle2d.getCenter().y * yFactor);
+		if (blobEvents[i].getElapsedMillis() > 2000) {
+			ofSetColor(255, 0, 0, 255);
+			ofDrawRectangle(_rect.x + blobEvents[i].baseRectangle2d.x * xFactor, _rect.y + blobEvents[i].baseRectangle2d.y * yFactor, blobEvents[i].baseRectangle2d.width * xFactor, blobEvents[i].baseRectangle2d.height * yFactor);
+			ofDrawBitmapString("blob[" + ofToString(blobEvents[i].mID) + "]\n alive = " + ofToString(blobEvents[i].getElapsedMillis()) + "\n sort = " + ofToString(blobEvents[i].sortPos) + "\n x = " + ofToString(blobEvents[i].headTop.x) + "\n y = " + ofToString(blobEvents[i].headTop.y) + "\n z = " + ofToString(blobEvents[i].headTop.z), _rect.x + blobEvents[i].baseRectangle2d.getCenter().x * xFactor, _rect.y + blobEvents[i].baseRectangle2d.getCenter().y * yFactor);
+		}
         
     }
 }

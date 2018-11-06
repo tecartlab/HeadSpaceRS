@@ -547,9 +547,10 @@ void ofApp::draw(){
                 drawCalibrationPoints();
                 break;
             case 2:
-                blobFinder.fbo.draw(viewMain);
+                blobFinder.grayImage.draw(viewMain);
                 break;
             case 3:
+				blobFinder.fbo.draw(viewMain);
                 ofSetColor(255, 0, 0, 255);
                 blobFinder.contourFinder.draw(viewMain);
 
@@ -559,6 +560,7 @@ void ofApp::draw(){
                 
                break;
             case 4:
+				blobFinder.grayEyeLevel.draw(viewMain);
                 blobFinder.contourEyeFinder.draw(viewMain);
 
                 ofNoFill();

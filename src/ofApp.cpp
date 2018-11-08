@@ -188,7 +188,8 @@ void ofApp::setup(){
     
     ofSetLogLevel(OF_LOG_NOTICE);
     
-    ofLogToFile("myLogFile.txt", true);
+	ofSetLogLevel(OF_LOG_VERBOSE);
+    //ofLogToFile("myLogFile.txt", true);
 
 	if (ofIsGLProgrammableRenderer()) {
 		ofLog(OF_LOG_NOTICE, "ofIsGLProgrammableRenderer() = " + ofToString(ofIsGLProgrammableRenderer()));

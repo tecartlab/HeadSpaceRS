@@ -38,19 +38,12 @@ public:
 	// return true if it matches and is not dying and hasn't been matched before.
     bool isMatching(ofRectangle _rect, int maxDistance);
 
-	// sets this event as beeing matched.
-	void setAsMatched();
-
 	// returns true if the event has already been matched.
-	bool hasBeenMatched();
+	bool hasBeenUpdated();
     
     void updatePrepare();
-    void updateBody(ofRectangle _rect, glm::vec3 _bodyBlobCenter, glm::vec2 _bodyBlobSize, glm::vec3 _headTop, glm::vec3 _headCenter, float _eyelevel, float _smoothPos);
-    void updateHead(glm::vec3 _headBlobCenter, glm::vec2 _headBlobSize, glm::vec3 _eyeCenter, float _smoothPos);
+    void update(ofRectangle _rect, glm::vec3 _headBlobCenter, glm::vec2 _headBlobSize, glm::vec3 _eyeCenter, float _smoothPos);
     
-	// returns true if it has been updated
-	bool hasBeenUpdated();
-
     ofVec3f getCurrentHeadCenter();
 
 	int getElapsedMillis();
@@ -88,12 +81,8 @@ public:
     ofSpherePrimitive eyeCenterSphere;
     
     ofRectangle baseRectangle2d;
-    
-	glm::vec3     bodyBlobCenter;
-	glm::vec2     bodyBlobSize;
-    
+        
 	glm::vec3     headTop;
-
 	glm::vec3     headCenter;
 
 	glm::vec3     headBlobCenter;

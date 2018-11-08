@@ -20,7 +20,7 @@
 
 #include <cmath>
 
-#define N_MAX_BLOBS 20
+#define N_MAX_BLOBS 30
 #define SCALE 0.001
 
 class BlobFinder {
@@ -116,8 +116,9 @@ public:
     ofParameter<int> nearFrustum;
     ofParameter<int> farFrustum;
        
-    ofParameter<int> blobAreaMin;
-    ofParameter<int> blobAreaMax;
+	ofParameter<int> blobAreaMinStp2;
+	ofParameter<int> blobAreaMinStp1;
+	ofParameter<int> blobAreaMax;
     ofParameter<int> countBlob;
 
     ofParameter<float> eyeLevel;

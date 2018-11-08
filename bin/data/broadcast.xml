@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <Broadcasting__>
 	<Broadcast>
-		<IP>192.168.1.255</IP>
+		<IP>127.0.0.1</IP>
 		<Port>47500</Port>
 	</Broadcast>
 	<Listening>
-		<IP>192.168.1.33</IP>
+		<IP>127.0.0.1</IP>
 		<Port>47600</Port>
 	</Listening>
 	<Streaming>

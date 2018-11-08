@@ -178,22 +178,6 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
  
     for(int i = 0; i < _blobFinder.blobEvents.size(); i++){
 		if (_blobFinder.blobEvents[i].isAlive() && _blobFinder.blobEvents[i].hasBeenUpdated()) {
-			if (streamingBodyBlob.get()) {
-				ofxOscMessage bodyBlob;
-				bodyBlob.setAddress("/ks/server/track/bodyblob");
-				bodyBlob.addIntArg(mServerID);
-				bodyBlob.addIntArg(frameNumber);
-				bodyBlob.addIntArg(_blobFinder.blobEvents[i].mID);
-				bodyBlob.addIntArg(_blobFinder.blobEvents[i].sortPos);
-				bodyBlob.addIntArg(_blobFinder.blobEvents[i].getElapsedMillis());
-				bodyBlob.addFloatArg(_blobFinder.blobEvents[i].bodyBlobCenter.x * scale);
-				bodyBlob.addFloatArg(_blobFinder.blobEvents[i].bodyBlobCenter.y * scale);
-				bodyBlob.addFloatArg(_blobFinder.blobEvents[i].bodyBlobSize.x * scale);
-				bodyBlob.addFloatArg(_blobFinder.blobEvents[i].bodyBlobSize.y * scale);
-				bodyBlob.addFloatArg(_blobFinder.blobEvents[i].bodyBlobCenter.z * scale);
-
-				sendMessageToTrackingClients(bodyBlob);
-			}
 			if (streamingHeadBlob.get()) {
 				ofxOscMessage headBlob;
 				headBlob.setAddress("/ks/server/track/headblob");

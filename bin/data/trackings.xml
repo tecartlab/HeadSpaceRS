@@ -1,32 +1,29 @@
 <?xml version="1.0"?>
 <Tracking___>
-	<NoiseReduction>
-		<MinSamples>2</MinSamples>
-		<DistanceFac_>1</DistanceFac_>
-	</NoiseReduction>
+	<Quality>
+		<Smoothing>0.5</Smoothing>
+		<BreathSize>30</BreathSize>
+		<MaxDistance>74</MaxDistance>
+		<sensorFboSize>2</sensorFboSize>
+	</Quality>
 	<SensorBox>
-		<left>-1000</left>
-		<right>5000</right>
-		<front>-3500</front>
-		<back>3500</back>
+		<left>5500</left>
+		<right>-1000</right>
+		<front>3000</front>
+		<back>-3500</back>
 		<top>2000</top>
 		<bottom>1200</bottom>
 	</SensorBox>
 	<Blobs>
-		<AreaMin>660</AreaMin>
-		<AreaMax>46696</AreaMax>
-		<MaxBlobs>11</MaxBlobs>
+		<AreaMax>19</AreaMax>
+		<AreaMinStp1>7</AreaMinStp1>
+		<AreaMinStp2>8</AreaMinStp2>
+		<MaxBlobs>5</MaxBlobs>
 	</Blobs>
 	<Gazing>
-		<Gaze_Point>0, 0, 1500</Gaze_Point>
+		<Use_gaze_point>1</Use_gaze_point>
+		<Gaze_point>0, 0, 1500</Gaze_point>
 		<EyeLevel>140</EyeLevel>
 		<EyeInset>0.8</EyeInset>
-		<Use_gaze_point>0</Use_gaze_point>
-		<Gaze_point>0, 0, 1500</Gaze_point>
 	</Gazing>
-	<Quality>
-		<Smoothing>0.986784</Smoothing>
-		<BreathSize>8</BreathSize>
-		<MaxDistance>70</MaxDistance>
-	</Quality>
 </Tracking___>

@@ -22,9 +22,9 @@ void BlobFinder::setup(ofxGui &gui){
 	sensorFboSize.addListener(this, &BlobFinder::allocate);
 
 	blobSmoothGroup = panel->addGroup("Quality");
-	blobSmoothGroup->add<ofxGuiIntInputField>(sensorFboSize.set("sensorFboSize (2^(8+n))", 1, 0, 2));
+	blobSmoothGroup->add<ofxGuiIntInputField>(sensorFboSize.set("sensorFboSize", 1, 1, 3));
 	blobSmoothGroup->add(smoothFactor.set("Smoothing", 0.5, 0., 1.));
-	blobSmoothGroup->add(eventBreathSize.set("BreathSize", 30, 0, 200));
+	blobSmoothGroup->add(eventBreathSize.set("BreathSize", 2000, 0, 5000));
 	blobSmoothGroup->add(eventMaxSize.set("MaxDistance", 400, 0, 1000));
 
     sensorBoxLeft.addListener(this, &BlobFinder::updateSensorBox);
@@ -43,9 +43,10 @@ void BlobFinder::setup(ofxGui &gui){
     sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxBottom.set("bottom", 1000));
 
 	blobGuiGroup = panel->addGroup("Blobs");
-    blobGuiGroup->add(blobAreaMin.set("AreaMin", 1000, 0, 30000));
-    blobGuiGroup->add(blobAreaMax.set("AreaMax", 6000, 0, 50000));
-    blobGuiGroup->add(countBlob.set("MaxBlobs", 5, 1, N_MAX_BLOBS));
+	blobGuiGroup->add(blobAreaMax.set("AreaMax", 5, 0, 255));
+	blobGuiGroup->add(blobAreaMinStp1.set("AreaMinStp1", 10, 0, 255));
+	blobGuiGroup->add(blobAreaMinStp2.set("AreaMinStp2", 10, 0, 255));
+	blobGuiGroup->add(countBlob.set("MaxBlobs", 5, 1, N_MAX_BLOBS));
  
 	blobEyeGroup = panel->addGroup("Gazing");
 	blobEyeGroup->add(useGazePoint.set("Use gaze point", true));
@@ -200,6 +201,9 @@ void BlobFinder::applyMask() {
 }
 
 void BlobFinder::update(){
+	ofColor white = ofColor::white;
+	ofColor black = ofColor::black;
+
 	/****************************************************************
               	      PREPARE NEW FRAME
 	*****************************************************************/
@@ -222,15 +226,13 @@ void BlobFinder::update(){
     
     //grayImage.blurHeavily();
     
-    grayEyeLevel = grayImage;
-
 	ofPixelsRef blobRefPixls = blobRef.getPixels();
     
-	ofPixelsRef eyeRef = grayEyeLevel.getPixels();
     ofPixelsRef greyref = grayImage.getPixels();
-    ofColor white = ofColor::white;
-    ofColor black = ofColor::black;
-        
+	ofPixelsRef eyeRef = grayEyeLevel.getPixels();
+	
+	eyeRef.setColor(black);
+
     float sensorFieldFront = sensorBoxFront.get();
     float sensorFieldBack = sensorBoxBack.get();
     float sensorFieldLeft = sensorBoxLeft.get();
@@ -253,7 +255,10 @@ void BlobFinder::update(){
 					  FIND BODY CONTOURS
 	*****************************************************************/
 
-	contourFinder.findContours(grayImage, blobAreaMin.get(), blobAreaMax.get(), countBlob.get(), false);
+	int minBlobSize = pow(blobAreaMinStp1.get() * sensorFboSize.get(), 2);
+	int maxBlobSize = pow(blobAreaMax.get() * sensorFboSize.get(), 2);
+
+	contourFinder.findContours(grayImage, minBlobSize, maxBlobSize, countBlob.get(), false);
 
     for (int i = 0; i < contourFinder.nBlobs; i++){
         ofRectangle bounds = contourFinder.blobs[i].boundingRect;
@@ -376,18 +381,23 @@ void BlobFinder::update(){
     //grayEyeLevel.invert();
     //grayEyeLevel.threshold(20);
     //grayEyeLevel.invert();
-    //grayEyeLevel.blurGaussian();
+    grayEyeLevel.blurGaussian();
 
     //ofLog(OF_LOG_NOTICE, "contourEyeFinder nBlobs : " + ofToString(contourEyeFinder.nBlobs));
 
+	int minBlobSize2 = pow(blobAreaMinStp2.get() * sensorFboSize.get(), 2);
+
     //find head shape on eye height contours
-    contourEyeFinder.findContours(grayEyeLevel, blobAreaMin.get()/4, blobAreaMax.get(), countBlob.get(), false);
+    contourEyeFinder.findContours(grayEyeLevel, minBlobSize2, maxBlobSize, countBlob.get(), false);
     for(int i = 0; i < contourEyeFinder.nBlobs; i++){
 
 		ofRectangle bounds = contourEyeFinder.blobs[i].boundingRect;
 
+		int brightness = eyeRef.getColor((float)bounds.getCenter().x, (float)bounds.getCenter().y).getBrightness();
+		float height = (brightness / 255.0) * sensorFieldHeigth + sensorFieldBottom;
+
 		//calculate the blob pos in worldspace
-		ofVec3f headBlobCenter = ofVec3f(((float)bounds.getCenter().x / captureScreenSize.x) * sensorFieldWidth + sensorFieldLeft, sensorFieldBack - ((float)bounds.getCenter().y / captureScreenSize.y) * sensorFieldDepth, 2.0);
+		ofVec3f headBlobCenter = ofVec3f(((float)bounds.getCenter().x / captureScreenSize.x) * sensorFieldWidth + sensorFieldLeft, sensorFieldBack - ((float)bounds.getCenter().y / captureScreenSize.y) * sensorFieldDepth, height);
 
 		//calculate the blob size in worldspace
 		ofVec2f headBlobSize = ofVec2f(((float)bounds.getWidth() / captureScreenSize.x) * sensorFieldWidth, ((float)bounds.getHeight() / captureScreenSize.y) * sensorFieldDepth);
@@ -426,22 +436,23 @@ void BlobFinder::update(){
 
         for(int bid = 0; bid < blobEvents.size(); bid++){
             // find the blob
-            if(!blobEvents[bid].hasBeenMatched() && blobEvents[bid].isMatching(bounds, eventMaxSize.get())){
+            if(!blobEvents[bid].hasBeenUpdated() && blobEvents[bid].isMatching(bounds, eventMaxSize.get())){
                
 				/****************************************************************
 						  UPDATE HEAD EVENTS
 				*****************************************************************/
+				ofLogVerbose("Updating old event with ID: " + ofToString(blobEvents[bid].mID) + " headHight = " + ofToString(headBlobCenter.z));
 
-				blobEvents[bid].updateHead(headBlobCenter, headBlobSize, eyePoint, smoothFactor.get());
-				blobEvents[bid].setAsMatched();
+				blobEvents[bid].update(bounds, headBlobCenter, headBlobSize, eyePoint, smoothFactor.get());
 				foundBlob = true;
 				break;
             }
         }
 		// if none is found, create a new one.
 		if (!foundBlob) {
-			blobEvents.push_back(BlobTracker(minID, bounds, eventBreathSize.get()));
-			blobEvents.back().updateHead(headBlobCenter, headBlobSize, eyePoint, smoothFactor.get());
+			ofLogVerbose("Creating new event with ID: " + ofToString(minID));
+			blobEvents.push_back(BlobTracker(minID++, bounds, eventBreathSize.get()));
+			blobEvents.back().update(bounds, headBlobCenter, headBlobSize, eyePoint, smoothFactor.get());
 		}
 
     }

@@ -177,7 +177,7 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
     sendMessageToTrackingClients(frame);
  
     for(int i = 0; i < _blobFinder.blobEvents.size(); i++){
-		if (_blobFinder.blobEvents[i].isAlive() && _blobFinder.blobEvents[i].hasBeenUpdated()) {
+		if (_blobFinder.blobEvents[i].isActive() && _blobFinder.blobEvents[i].hasBeenUpdated()) {
 			if (streamingHeadBlob.get()) {
 				ofxOscMessage headBlob;
 				headBlob.setAddress("/ks/server/track/headblob");
@@ -185,7 +185,7 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
 				headBlob.addIntArg(frameNumber);
 				headBlob.addIntArg(_blobFinder.blobEvents[i].mID);
 				headBlob.addIntArg(_blobFinder.blobEvents[i].sortPos);
-				headBlob.addIntArg(_blobFinder.blobEvents[i].getElapsedMillis());
+				headBlob.addIntArg(_blobFinder.blobEvents[i].getAgeInMillis());
 				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobCenter.x * scale);
 				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobCenter.y * scale);
 				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobCenter.z * scale);
@@ -201,13 +201,10 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
 				head.addIntArg(frameNumber);
 				head.addIntArg(_blobFinder.blobEvents[i].mID);
 				head.addIntArg(_blobFinder.blobEvents[i].sortPos);
-				head.addIntArg(_blobFinder.blobEvents[i].getElapsedMillis());
+				head.addIntArg(_blobFinder.blobEvents[i].getAgeInMillis());
 				head.addFloatArg(_blobFinder.blobEvents[i].headTop.x * scale);
 				head.addFloatArg(_blobFinder.blobEvents[i].headTop.y * scale);
 				head.addFloatArg(_blobFinder.blobEvents[i].headTop.z * scale);
-				head.addFloatArg(_blobFinder.blobEvents[i].headCenter.x * scale);
-				head.addFloatArg(_blobFinder.blobEvents[i].headCenter.y * scale);
-				head.addFloatArg(_blobFinder.blobEvents[i].headCenter.z * scale);
 
 				sendMessageToTrackingClients(head);
 			}
@@ -217,7 +214,7 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
 				eye.addIntArg(mServerID);
 				eye.addIntArg(_blobFinder.blobEvents[i].mID);
 				eye.addIntArg(_blobFinder.blobEvents[i].sortPos);
-				eye.addIntArg(_blobFinder.blobEvents[i].getElapsedMillis());
+				eye.addIntArg(_blobFinder.blobEvents[i].getAgeInMillis());
 				eye.addFloatArg(_blobFinder.blobEvents[i].eyeCenter.x * scale);
 				eye.addFloatArg(_blobFinder.blobEvents[i].eyeCenter.y * scale);
 				eye.addFloatArg(_blobFinder.blobEvents[i].eyeCenter.z * scale);
@@ -234,7 +231,7 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
 			bodyBlob.addIntArg(mServerID);
 			bodyBlob.addIntArg(frameNumber);
 			bodyBlob.addIntArg(_blobFinder.blobEvents[i].mID);
-			bodyBlob.addIntArg(_blobFinder.blobEvents[i].getElapsedMillis());
+			bodyBlob.addIntArg(_blobFinder.blobEvents[i].getAgeInMillis());
 
 			sendMessageToTrackingClients(bodyBlob);
 		}

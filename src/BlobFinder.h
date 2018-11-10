@@ -23,6 +23,12 @@
 #define N_MAX_BLOBS 30
 #define SCALE 0.001
 
+struct BodyBlob {
+	glm::vec3 headTop;
+	ofRectangle bound;
+	bool hasBeenTaken;
+};
+
 class BlobFinder {
     
 public:
@@ -44,13 +50,12 @@ public:
 
     void drawBodyBlobsBox();
     void drawBodyBlobsHeadTop();
-    void drawHeadBlobs();
-    void drawEyeCenters();
     
     void drawGazePoint();
 
     vector <BlobTracker> blobEvents;
-       
+	vector <BodyBlob> detectedHeads;
+
     ofVec3f kinectPos;
     
     ofPixels greyRef_store1;
@@ -130,7 +135,7 @@ public:
     ofSpherePrimitive gazePointer;
 
 	ofParameter<int> eventBreathSize;
-	ofParameter<int> eventMaxSize;
+	ofParameter<float> eventMaxSize;
 	ofParameter<float> smoothFactor;
 
 	ofParameter<int> sensorFboSize;

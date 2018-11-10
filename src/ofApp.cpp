@@ -638,23 +638,16 @@ void ofApp::drawPreview() {
 	ofPushMatrix();
 
     ofSetColor(255, 255, 0);
-    blobFinder.sensorBox.draw();
-
-	ofScale(0.001);
+    blobFinder.drawSensorBox();
 
     ofNoFill();
     ofSetColor(255, 100, 255);
     blobFinder.drawBodyBlobsBox();
     blobFinder.drawBodyBlobsHeadTop();
-    ofSetColor(100, 100, 255);
-    blobFinder.drawHeadBlobs();
-    ofSetColor(0, 0, 255);
-    blobFinder.drawEyeCenters();
 
     ofFill();
     ofSetColor(255, 100, 100);
     blobFinder.drawGazePoint();
-
 
 	ofPopMatrix();
 

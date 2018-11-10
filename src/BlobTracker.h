@@ -21,8 +21,11 @@
 class BlobTracker {
     
 public:
-    BlobTracker(int _ID, ofRectangle _rect, int _liveSpan);
+    BlobTracker(int _ID, int _liveSpan, ofRectangle _rect, glm::vec3 _headBlobCenter, glm::vec2 _headBlobSize, glm::vec3 _headTop);
     
+	// returns true if the event is alive
+	bool isActive();
+
 	// returns true if the event is alive
 	bool isAlive();
 
@@ -32,30 +35,21 @@ public:
 	// returns true if this event is dead and can be removed
 	bool checkForDisposal();
 
-	// dispose this event in any case in the next recycling 
-	void dispose();
-
 	// return true if it matches and is not dying and hasn't been matched before.
-    bool isMatching(ofRectangle _rect, int maxDistance);
+    float getDistance(glm::vec3 _headTop);
 
 	// returns true if the event has already been matched.
 	bool hasBeenUpdated();
     
     void updatePrepare();
-    void update(ofRectangle _rect, glm::vec3 _headBlobCenter, glm::vec2 _headBlobSize, glm::vec3 _eyeCenter, float _smoothPos);
+    void update(ofRectangle _rect, glm::vec3 _headBlobCenter, glm::vec2 _headBlobSize, glm::vec3 _headTop, float _smoothPos);
     
-    ofVec3f getCurrentHeadCenter();
-
-	int getElapsedMillis();
+	int getAgeInMillis();
     
     void drawBodyBox();
     void drawHeadTop();
-    void drawHeadBlob();
-    void drawEyeCenter();
     
-    bool hasBodyUpdated;
-    bool hasHeadUpdated;
-	bool mHasBeenMatched;
+	bool mHasBeenUpdated;
 
     bool mIsDying;
     
@@ -74,7 +68,6 @@ public:
 	int mLifeCycles;
 
     ofBoxPrimitive bodyBox;
-    ofPlanePrimitive headBlob;
     
     ofSpherePrimitive bodyHeadTopSphere;
     ofSpherePrimitive headCenterSphere;
@@ -83,7 +76,6 @@ public:
     ofRectangle baseRectangle2d;
         
 	glm::vec3     headTop;
-	glm::vec3     headCenter;
 
 	glm::vec3     headBlobCenter;
 	glm::vec2     headBlobSize;

@@ -154,6 +154,7 @@ class ofApp : public ofBaseApp{
     bool bUpdateCalc = false;
     bool bUpdateMeasurment = false;
     bool bUpdateMeasurmentFine = false;
+	char  bUpdateSetMesurmentPoint = -1;
     
     int cycleCounter = 0;
    
@@ -176,7 +177,7 @@ class ofApp : public ofBaseApp{
 
     ofVboMesh geometry;
         
-    ofMatrix4x4 kinectRransform;
+    ofMatrix4x4 deviceTransform;
 
     string calcdata;
     

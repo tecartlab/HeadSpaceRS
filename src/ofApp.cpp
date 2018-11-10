@@ -368,6 +368,12 @@ void ofApp::updateCalc(){
 	glm::vec3 newYAxis = glm::normalize(glm::vec3(planePoint_Y - planePoint_Z));
 	glm::vec3 newZAxis = glm::cross(newXAxis, newYAxis);
 
+	// we calculate the Y axis from the Z axis to make sure all the vectors are perpendicular to each other
+	// CAREFULL: It could be disabled because:
+	//   Using nonperpendicular axis inspired from the point cloud data seems to 
+	//   correct some of point cloud distortions....
+	newYAxis = glm::cross(newZAxis, newXAxis);
+
 	// the following solution was inspired by this post: https://stackoverflow.com/questions/34391968/how-to-find-the-rotation-matrix-between-two-coordinate-systems
 	// however: it uses a 4x4 matrix and puts translation data as follows:
 	//{ x.x x.y x.z 0 y.x y.y y.z 0 z.x z.y z.z 0 t.x t.y t.z 1 }
@@ -444,9 +450,9 @@ void ofApp::updateMatrix(){
 	sphere_Y.setRadius(0.05);
 	sphere_Z.setRadius(0.05);
 
-    //kinectRransform = ofMatrix4x4();
+    //deviceTransform = ofMatrix4x4();
     
-	kinectRransform = transformation.get();
+	deviceTransform = transformation.get();
 
     //blobFinder.kinectPos = ofVec3f(0, 0, transformation.get().z);    
 }
@@ -629,10 +635,24 @@ void ofApp::drawPreview() {
 
     //This moves the crossingpoint of the kinect center line and the plane to the center of the stage
     //ofTranslate(-planeCenterPoint.x, -planeCenterPoint.y, 0);
-	ofMultMatrix(kinectRransform);
+	ofMultMatrix(deviceTransform);
 	if (bPreviewPointCloud) {
 		realSense->draw();
 	}
+	ofFill();
+	ofSetColor(255, 0, 0);
+	sphere_X.draw();
+	sphere_Y.draw();
+	sphere_Z.draw();
+	/*
+	frustumCenterSphere.draw();
+	*/
+
+	geometry.draw();
+
+	//ofSetColor(0, 0, 255);
+	//realSenseFrustum.drawWireframe();
+	
 	ofPopMatrix();
 
 	ofPushMatrix();
@@ -649,27 +669,7 @@ void ofApp::drawPreview() {
     ofSetColor(255, 100, 100);
     blobFinder.drawGazePoint();
 
-	ofPopMatrix();
-
-	ofPushMatrix();
     
-    ofMultMatrix(kinectRransform);
-
-    ofFill();
-    ofSetColor(255, 0, 0);
-    sphere_X.draw();
-    sphere_Y.draw();
-    sphere_Z.draw();
-	/*
-	frustumCenterSphere.draw();
-	*/
-
-    geometry.draw();
-
-    //ofSetColor(0, 0, 255);
-    //realSenseFrustum.drawWireframe();
-    
-
 	glDisable(GL_DEPTH_TEST);
 	ofPopMatrix();
     
@@ -690,7 +690,7 @@ void ofApp::drawCapturePointCloud() {
 
 	glPointSize(blobGrain.get() * 2);
 	ofPushMatrix();
-	ofMultMatrix(kinectRransform);
+	ofMultMatrix(deviceTransform);
 	realSense->draw();
 	ofPopMatrix();
 	
@@ -725,21 +725,18 @@ void ofApp::exit() {
 
 void ofApp::createHelp(){
     help = string("press v -> to show visualizations\n");
-    help += "press p -> to show pointcloud\n";
-    help += "press k -> to update the calculation\n";
-    help += "press h -> to show help \n";
-    help += "press r -> to show calculation results \n";
-	help += "press s -> to save current settings.\n";
-	help += "press l -> to load last saved settings\n";
 	help += "press 1 - 6 -> to change the viewport\n";
-	help += "press x|y|z + mouse-release -> to change the calibration points in viewport 1\n";
-    
+	help += "press p -> to show pointcloud\n";
+    help += "press h -> to show help \n";
+    help += "press s -> to save current settings.\n";
+	help += "press l -> to load last saved settings\n";
+	help += "press x|y|z and then mouse-click -> to change the calibration points in viewport 1\n";    
+	help += "press k -> to update the calculation\n";
+	help += "press r -> to show calculation results \n";
 	help += "press t -> to terminate the connection, connection is: " + ofToString(realSense->isRunning()) + "\n";
 	help += "press o -> to open the connection again\n";
     help += "ATTENTION: Setup-Settings (ServerID and Video) will only apply after restart\n";
  	help += "Broadcasting ip: "+networkMng.broadcastIP.get()+" port: "+ofToString(networkMng.broadcastPort.get())+" serverID: "+ofToString(networkMng.mServerID)+" \n";
- 	help += "Correction Distance Math -> corrected distance = distance * (Base + distance / Divisor)\n";
-	help += "Correction pixel Site    -> corrected pixel size = pixel size * Factor\n";
     /*
      help += "using opencv threshold = " + ofToString(bThreshWithOpenCV) + " (press spacebar)\n";
      help += "set near threshold " + ofToString(nearThreshold) + " (press: + -)\n";
@@ -749,6 +746,7 @@ void ofApp::createHelp(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+	bUpdateSetMesurmentPoint = -1;
 	switch (key) {
 		case ' ':
 			break;
@@ -834,6 +832,18 @@ void ofApp::keyPressed(int key){
 			//kinect.enableDepthNearValueWhite(!kinect.isDepthNearValueWhite());
 			break;
 						
+		case 'x':
+			bUpdateSetMesurmentPoint = key;
+			break;
+
+		case 'y':
+			bUpdateSetMesurmentPoint = key;
+			break;
+
+		case 'z':
+			bUpdateSetMesurmentPoint = key;
+			break;
+
 		case '0':
 			//kinect.setLed(ofxKinect::LED_OFF);
 			break;
@@ -890,20 +900,20 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    if(iMainCamera == 0 || iMainCamera == 1) {
-        if(ofGetKeyPressed('x')){
+    if(iMainCamera == 0 || iMainCamera == 1 && bUpdateSetMesurmentPoint != -1) {
+        if(bUpdateSetMesurmentPoint == 'x'){
             int posX = (x - VIEWGRID_WIDTH) / viewMain.width * REALSENSE_DEPTH_WIDTH;
             int posY = y;
             if(0 <= posX && posX < REALSENSE_DEPTH_WIDTH &&
                0 <= posY && posY < REALSENSE_DEPTH_HEIGHT)
                 calibPoint_X.set(glm::vec2(posX, posY));
-        }else if(ofGetKeyPressed('y')){
+        }else if(bUpdateSetMesurmentPoint == 'y'){
             int posX = (x - VIEWGRID_WIDTH) / viewMain.width * REALSENSE_DEPTH_WIDTH;
             int posY = y;
             if(0 <= posX && posX < REALSENSE_DEPTH_WIDTH &&
                0 <= posY && posY < REALSENSE_DEPTH_HEIGHT)
                 calibPoint_Y.set(glm::vec2(posX, posY));
-        }else if(ofGetKeyPressed('z')){
+        }else if(bUpdateSetMesurmentPoint == 'z'){
             int posX = (x - VIEWGRID_WIDTH) / viewMain.width * REALSENSE_DEPTH_WIDTH;
             int posY = y;
             if(0 <= posX && posX < REALSENSE_DEPTH_WIDTH &&

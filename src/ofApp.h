@@ -122,7 +122,7 @@ class ofApp : public ofBaseApp{
 	void changeOperation(int& _index);
 
     void drawPreview();
-    void drawCapturePointCloud();
+    void drawCapturePointCloud(bool _mask);
 
 	void createGUIDeviceParams();
 
@@ -153,7 +153,8 @@ class ofApp : public ofBaseApp{
     
     bool bUpdateCalc = false;
     bool bUpdateMeasurment = false;
-    bool bUpdateMeasurmentFine = false;
+	bool bUpdateMeasurmentFine = false;
+	bool bUpdateImageMask = false;
 	char  bUpdateSetMesurmentPoint = -1;
     
     int cycleCounter = 0;

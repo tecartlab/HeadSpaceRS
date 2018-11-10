@@ -35,10 +35,16 @@ public:
     void setup(ofxGui &gui);
     void allocate(int &value);
     
-    void captureBegin();
-    void captureEnd();
-    
-	void applyMask();
+	void captureBegin();
+	void captureEnd();
+
+	void captureMaskBegin();
+	void captureMaskEnd();
+
+	void clearMask();
+
+	void loadMask();
+	void saveMask();
 
     void update();
     bool hasParamUpdate();
@@ -139,6 +145,8 @@ public:
 	ofParameter<float> smoothFactor;
 
 	ofParameter<int> sensorFboSize;
+
+	ofParameter<bool> useMask;
 
 	ofVec2f captureScreenSize;
 

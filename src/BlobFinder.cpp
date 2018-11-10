@@ -27,16 +27,17 @@ void BlobFinder::setup(ofxGui &gui){
 	blobSmoothGroup->add(eventBreathSize.set("BreathSize", 2000, 0, 5000));
 	blobSmoothGroup->add(eventMaxSize.set("MaxDistance", 400, 0, 1000));
 
-    sensorBoxLeft.addListener(this, &BlobFinder::updateSensorBox);
-    sensorBoxRight.addListener(this, &BlobFinder::updateSensorBox);
+	sensorBoxLeft.addListener(this, &BlobFinder::updateSensorBox);
+	sensorBoxRight.addListener(this, &BlobFinder::updateSensorBox);
     sensorBoxFront.addListener(this, &BlobFinder::updateSensorBox);
     sensorBoxBack.addListener(this, &BlobFinder::updateSensorBox);
     sensorBoxTop.addListener(this, &BlobFinder::updateSensorBox);
     sensorBoxBottom.addListener(this, &BlobFinder::updateSensorBox);
     
 	sensorBoxGuiGroup = panel->addGroup("SensorBox");
-    sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxLeft.set("left", 1000));
-    sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxRight.set("right", -1000));
+	sensorBoxGuiGroup->add(useMask.set("Use Mask", false));
+	sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxLeft.set("left", 1000));
+	sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxRight.set("right", -1000));
     sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxFront.set("front", 1000));
     sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxBack.set("back", -1000));
     sensorBoxGuiGroup->add<ofxGuiIntInputField>(sensorBoxTop.set("top", 2000));
@@ -63,10 +64,6 @@ void BlobFinder::allocate(int &value){
 	ofLog(OF_LOG_NOTICE, "set capture fbo size to = " + ofToString(pow(2, 8 + value)));
 	gazePointer.setRadius(1000);
 
-	maskImg.load("mask.png");
-	maskImg.resize(captureScreenSize.x, captureScreenSize.y);
-	brushImg.load("brush.png");
-
     fbopixels.allocate(captureScreenSize.x, captureScreenSize.y, OF_PIXELS_RGB);
     
 	colorImg.allocate(captureScreenSize.x, captureScreenSize.y);
@@ -90,6 +87,16 @@ void BlobFinder::allocate(int &value){
 
 	maskFbo.allocate(s);
 	fbo.allocate(s);
+
+	loadMask();
+
+	// Let's clear the FBO's
+	// otherwise it will bring some junk with it from the memory    
+
+	fbo.begin();
+	ofClear(0, 0, 0, 255);
+	fbo.end();
+
 
 #ifdef TARGET_OPENGLES
 	maskShader.load("shaders_gles/alphamask.vert", "shaders_gles/alphamask.frag");
@@ -151,16 +158,6 @@ void BlobFinder::allocate(int &value){
 		maskShader.linkProgram();
 	}
 #endif
-	// Let's clear the FBO's
-	// otherwise it will bring some junk with it from the memory    
-	maskFbo.begin();
-	ofClear(0, 0, 0, 255);
-	maskFbo.end();
-
-	fbo.begin();
-	ofClear(0, 0, 0, 255);
-	fbo.end();
-
 }
 
 void BlobFinder::captureBegin(){
@@ -177,27 +174,43 @@ void BlobFinder::captureEnd(){
     captureFBO.end();
 }
 
-void BlobFinder::applyMask() {
-	// MASK (frame buffer object)
-	 //
-//	maskFbo.begin();
-//	if (bBrushDown) {
-//		brushImg.draw(mouseX - 25, mouseY - 25, 50, 50);
-//	}
-//	maskFbo.end();
-	// HERE the shader-masking happends
-	 //
-	fbo.begin();
-	// Cleaning everthing with alpha mask on 0 in order to make it transparent for default
-	ofClear(0, 0, 0, 0);
 
-	maskShader.begin();
-	maskShader.setUniformTexture("maskTex", maskImg.getTexture(), 1);
+void BlobFinder::clearMask() {
+	maskFbo.begin();
+	ofClear(255, 255, 255, 255);
+	maskFbo.end();
+	ofPixels maskFBOPixels;
+	maskFbo.readToPixels(maskFBOPixels);
+	maskImg.setFromPixels(maskFBOPixels);
+}
 
-	captureFBO.draw(0, 0);
+void BlobFinder::captureMaskBegin() {
+	maskFbo.begin();
+	//ofClear(255, 255, 255, 255);
+	captureCam.scale = 1;
+	// FBO capturing
+	captureCam.begin(ofRectangle(0, 0, captureScreenSize.x, captureScreenSize.y), sensorBoxLeft.get() * SCALE, sensorBoxRight.get() * SCALE, sensorBoxBack.get() * SCALE, sensorBoxFront.get() * SCALE, -sensorBoxTop.get() * SCALE, sensorBoxTop.get() * SCALE);
+}
 
-	maskShader.end();
-	fbo.end();
+void BlobFinder::captureMaskEnd() {
+	captureCam.end();
+	maskFbo.end();
+
+	ofPixels maskFBOPixels;
+	maskFbo.readToPixels(maskFBOPixels);
+	maskImg.setFromPixels(maskFBOPixels);
+}
+
+void BlobFinder::saveMask() {
+	maskImg.save("mask.png");
+}
+
+void BlobFinder::loadMask() {
+	maskImg.allocate(captureScreenSize.x, captureScreenSize.y, OF_IMAGE_COLOR_ALPHA);
+	maskImg.load("mask.png");
+	maskFbo.begin();
+	maskImg.draw(0, 0);
+	maskFbo.end();
 }
 
 void BlobFinder::update(){
@@ -216,8 +229,24 @@ void BlobFinder::update(){
 		minID = (blobEvents[e].mID >= minID) ? blobEvents[e].mID + 1 : minID;
 	}
 
-	fbo.readToPixels(fbopixels);
-	//captureFBO.readToPixels(fbopixels);
+	if (useMask.get()) {
+		fbo.begin();
+		// Cleaning everthing with alpha mask on 0 in order to make it transparent for default
+		ofClear(0, 0, 0, 0);
+
+		maskShader.begin();
+		maskShader.setUniformTexture("maskTex", maskImg.getTexture(), 1);
+
+		captureFBO.draw(0, 0);
+
+		maskShader.end();
+		fbo.end();
+
+		fbo.readToPixels(fbopixels);
+	}
+	else {
+		captureFBO.readToPixels(fbopixels);
+	}
 
     colorImg.setFromPixels(fbopixels);
 

@@ -3,13 +3,16 @@
 // this is coming from our C++ code
 uniform float lowerLimit;
 uniform float upperLimit;
+uniform int mask;
 
 varying vec3 worldPos;
-varying vec2 texcoord;
 
 void main()
 {
     float height =  (worldPos.z - lowerLimit) / (upperLimit - lowerLimit);
-    vec4 color = vec4(height,height,height,1);
-    gl_FragColor = color;
+    if(mask == 1){
+      gl_FragColor = vec4(0,0,0,height * 10000);
+    } else {
+      gl_FragColor = vec4(height,height,height,1);
+    }
 }

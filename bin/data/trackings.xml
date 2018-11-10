@@ -13,6 +13,7 @@
 		<back>-3500</back>
 		<top>2000</top>
 		<bottom>1200</bottom>
+		<Use_Mask>1</Use_Mask>
 	</SensorBox>
 	<Blobs>
 		<AreaMax>39</AreaMax>

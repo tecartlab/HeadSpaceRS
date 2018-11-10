@@ -4,20 +4,19 @@
 // by default from OpenFrameworks
 uniform mat4 modelViewProjectionMatrix;
 
+// from the app
+uniform mat4 viewMatrixInverse;
+
 in vec4 position;
 in vec2 texcoord;
 
 // this is something we're creating for this shader
-out vec2 texCoordVarying;
-
-// this is coming from our C++ code
-uniform float mouseX;
+out vec3 worldPos;
 
 void main()
 {
-    // here we move the texture coordinates
-    texCoordVarying = vec2(texcoord.x + mouseX, texcoord.y);
-
     // send the vertices to the fragment shader
-	gl_Position = modelViewProjectionMatrix * position;
+    gl_Position = modelViewProjectionMatrix * position;
+
+    worldPos = vec3((viewMatrixInverse * gl_ModelViewMatrix * position).xyz);
 }

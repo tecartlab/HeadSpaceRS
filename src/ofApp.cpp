@@ -508,21 +508,27 @@ void ofApp::update(){
         if(bUpdateMeasurmentFine){
             measurementCycleFine();
         }
+
+		if (bUpdateImageMask) {
+			blobFinder.captureMaskBegin();
+			drawCapturePointCloud(true);
+			blobFinder.captureMaskEnd();
+		}
+		else {
+			//////////////////////////////////
+			// Cature captureCloud to FBO
+			//////////////////////////////////
+
+			blobFinder.captureBegin();
+			drawCapturePointCloud(false);
+			blobFinder.captureEnd();
+
+			//////////////////////////////////
+			// BlobFinding on the captured FBO
+			/////////////////////////////////////
+			blobFinder.update();
+		}
     
-        //////////////////////////////////
-        // Cature captureCloud to FBO
-        //////////////////////////////////
-        
-        blobFinder.captureBegin();
-		drawCapturePointCloud();
-		blobFinder.captureEnd();
-
-		blobFinder.applyMask();
-
-        //////////////////////////////////
-        // BlobFinding on the captured FBO
-        /////////////////////////////////////
-        blobFinder.update();
 	}
     
     networkMng.update(blobFinder, realSenseFrustum, transformation.get());
@@ -539,9 +545,9 @@ void ofApp::draw(){
 		realSense->drawDepthStream(viewGrid[0]);
 		realSense->drawInfraLeftStream(viewGrid[1]);
 
-        blobFinder.captureFBO.draw(viewGrid[2]);
+        blobFinder.grayImage.draw(viewGrid[2]);
         blobFinder.contourFinder.draw(viewGrid[3]);
-        blobFinder.contourEyeFinder.draw(viewGrid[4]);
+        blobFinder.maskFbo.draw(viewGrid[4]);
 
         
         switch (iMainCamera) {
@@ -555,11 +561,14 @@ void ofApp::draw(){
                 break;
             case 2:
                 blobFinder.grayImage.draw(viewMain);
-                break;
+				ofSetColor(255, 0, 0, 255);
+				blobFinder.contourFinder.draw(viewMain);
+				
+				break;
             case 3:
 				blobFinder.fbo.draw(viewMain);
-                ofSetColor(255, 0, 0, 255);
-                blobFinder.contourFinder.draw(viewMain);
+				ofSetColor(255, 0, 0, 255);
+				blobFinder.contourFinder.draw(viewMain);
 
                 ofNoFill();
                 ofSetColor(255, 0, 255, 255);
@@ -567,8 +576,7 @@ void ofApp::draw(){
                 
                break;
             case 4:
-				blobFinder.grayEyeLevel.draw(viewMain);
-                blobFinder.contourEyeFinder.draw(viewMain);
+				blobFinder.maskFbo.draw(viewMain);
 
                 ofNoFill();
                 ofSetColor(255, 0, 255, 255);
@@ -675,20 +683,27 @@ void ofApp::drawPreview() {
     
 }
 
-void ofApp::drawCapturePointCloud() {
-
+void ofApp::drawCapturePointCloud(bool _mask) {
     glEnable(GL_DEPTH_TEST);
-	
+
 	shader.begin();
 
 	float lowerLimit = blobFinder.sensorBoxBottom.get() / 1000.f;
 	float upperLimit = blobFinder.sensorBoxTop.get() / 1000.f;
 
+	if (_mask) {
+		//ofClear(255, 255, 255, 255);
+		shader.setUniform1i("mask", 1);
+		glPointSize(blobGrain.get() * 4);
+	}
+	else {
+		shader.setUniform1i("mask", 0);
+		glPointSize(blobGrain.get() * 2);
+	}
 	shader.setUniform1f("lowerLimit", lowerLimit);
 	shader.setUniform1f("upperLimit", upperLimit);
 	shader.setUniformMatrix4f("viewMatrixInverse", glm::inverse(ofGetCurrentViewMatrix()));
 
-	glPointSize(blobGrain.get() * 2);
 	ofPushMatrix();
 	ofMultMatrix(deviceTransform);
 	realSense->draw();
@@ -730,7 +745,9 @@ void ofApp::createHelp(){
     help += "press h -> to show help \n";
     help += "press s -> to save current settings.\n";
 	help += "press l -> to load last saved settings\n";
-	help += "press x|y|z and then mouse-click -> to change the calibration points in viewport 1\n";    
+	help += "press m -> to update mask image CAREFULL: press m again to stop updating (" + ofToString(bUpdateImageMask) + ")\n";
+	help += "press c -> to clear mask image\n";
+	help += "press x|y|z and then mouse-click -> to change the calibration points in viewport 1\n";
 	help += "press k -> to update the calculation\n";
 	help += "press r -> to show calculation results \n";
 	help += "press t -> to terminate the connection, connection is: " + ofToString(realSense->isRunning()) + "\n";
@@ -759,8 +776,8 @@ void ofApp::keyPressed(int key){
 			bShowVisuals = !bShowVisuals;
             break;
             
-		case 'o':
-			//kinect.open();
+		case 'c':
+			blobFinder.clearMask();
 			break;
 			
 		case 't':
@@ -778,6 +795,7 @@ void ofApp::keyPressed(int key){
         case 's':
             setupCalib->saveToFile("settings.xml");
             blobFinder.panel->saveToFile("trackings.xml");
+			blobFinder.saveMask();
 			networkMng.panel->saveToFile("broadcast.xml");
 			post->saveToFile("postprocessing.xml");
 			device->saveToFile(realSense->getSerialNumber(-1) + ".xml");
@@ -787,17 +805,13 @@ void ofApp::keyPressed(int key){
         case 'l':
             setupCalib->loadFromFile("settings.xml");
             blobFinder.panel->loadFromFile("trackings.xml");
+			blobFinder.loadMask();
             networkMng.panel->loadFromFile("broadcast.xml");
 			post->loadFromFile("postprocessing.xml");
 			device->loadFromFile(realSense->getSerialNumber(-1) + ".xml");
 			guitransform->loadFromFile("transformation.xml");
 			break;
-
-		case 'm':
-			if(cam.getMouseInputEnabled()) cam.disableMouseInput();
-			else cam.enableMouseInput();
-			break;
-            
+           
 		case 'h':
 			bShowHelp = !bShowHelp;
             if (bShowHelp) {
@@ -828,8 +842,11 @@ void ofApp::keyPressed(int key){
 			//if (nearThreshold < 0) nearThreshold = 0;
 			break;
 			
-		case 'w':
-			//kinect.enableDepthNearValueWhite(!kinect.isDepthNearValueWhite());
+		case 'm':
+			bUpdateImageMask = !bUpdateImageMask;
+			if (bUpdateImageMask) {
+				blobFinder.clearMask();
+			}
 			break;
 						
 		case 'x':

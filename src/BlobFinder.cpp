@@ -276,7 +276,8 @@ void BlobFinder::update(){
             }
         }
 
-        float averageBrightness = 0;
+		/*
+		float averageBrightness = 0;
         int averageCounter = 0;
 
         // go through the pixels again and get the average brightness for the headTopThreshold
@@ -291,6 +292,7 @@ void BlobFinder::update(){
         }
         
         brightness = averageBrightness / averageCounter;
+        */
         
         // find all the pixels down to the eyelevel threshold. this yealds an image with blobs that mark the size of the head at eyelevel.
         ofVec2f headtop2d = ofVec2f();

@@ -7,3 +7,4 @@ x64/
 bin/HeadSpaceRS.ipdb
 bin/HeadSpaceRS.iobj
 *.bag
+bin/DLLS/

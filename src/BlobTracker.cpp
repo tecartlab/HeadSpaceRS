@@ -13,6 +13,7 @@ BlobTracker::BlobTracker(int _ID, int _liveSpan, ofRectangle _rect, glm::vec3 _h
 	mBreathSize = _liveSpan;
 	mCountDown = mBreathSize;
     mIsDying = false;
+	mIsDead = false;
 	mLifeCycles = ofGetElapsedTimeMillis();
 	mHasBeenUpdated = false;
 	update(_rect, _headBlobCenter, _headBlobSize, _headTop, 0);
@@ -55,6 +56,10 @@ bool BlobTracker::isAlive()
 bool BlobTracker::isDying() {
 	checkForDisposal();
 	return mIsDying;
+}
+
+bool BlobTracker::isDead() {
+	return mIsDead;
 }
 
 bool BlobTracker::checkForDisposal() {

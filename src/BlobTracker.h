@@ -32,6 +32,9 @@ public:
 	// returns true if this is the last lifecycle
     bool isDying();
 
+	// returns true if this is the last lifecycle and the event end has been sent
+	bool isDead();
+
 	// returns true if this event is dead and can be removed
 	bool checkForDisposal();
 
@@ -51,8 +54,9 @@ public:
     
 	bool mHasBeenUpdated;
 
-    bool mIsDying;
-    
+	bool mIsDying;
+	bool mIsDead;
+
     int sortPos;
 
 	// this event ID

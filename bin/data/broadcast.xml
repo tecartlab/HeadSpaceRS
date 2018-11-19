@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <Broadcasting__>
 	<Broadcast>
-		<IP>127.0.0.1</IP>
+		<IP>192.168.0.255</IP>
 		<Port>47500</Port>
 	</Broadcast>
 	<Listening>
-		<IP>127.0.0.1</IP>
+		<IP>192.168.0.100</IP>
 		<Port>47600</Port>
 	</Listening>
 	<Streaming>
@@ -15,4 +15,12 @@
 		<eye>0</eye>
 	</Streaming>
 	<ServerID>0</ServerID>
+	<Broadcast_TX>
+		<TX_IP>192.168.0.255</TX_IP>
+		<TX_Port>47500</TX_Port>
+	</Broadcast_TX>
+	<Listening_RX>
+		<RX_IP>192.168.0.100</RX_IP>
+		<RX_Port>47600</RX_Port>
+	</Listening_RX>
 </Broadcasting__>

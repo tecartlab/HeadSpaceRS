@@ -61,7 +61,6 @@ public:
     vector<string>  localIpAddresses;
     
     string          mDeviceSerial;
-    int             mServerID;
     
     float           scale;
     
@@ -96,7 +95,7 @@ public:
     ofParameter<string> listeningIP;
     ofParameter<int> listeningPort;
 
-    ofParameter<int> kinectServerID;
+    ofParameter<int> mServerID;
 
     ofParameterGroup streamingGuiGroup;
     

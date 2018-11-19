@@ -3,21 +3,21 @@
 	<Quality>
 		<Smoothing>0.5</Smoothing>
 		<BreathSize>1982</BreathSize>
-		<MaxDistance>259.912</MaxDistance>
+		<MaxDistance>493.392</MaxDistance>
 		<sensorFboSize>2</sensorFboSize>
 	</Quality>
 	<SensorBox>
-		<left>5500</left>
-		<right>-1000</right>
-		<front>3000</front>
-		<back>-3500</back>
-		<top>2000</top>
-		<bottom>1200</bottom>
+		<left>5800</left>
+		<right>-300</right>
+		<front>3200</front>
+		<back>-3200</back>
+		<top>1800</top>
+		<bottom>300</bottom>
 		<Use_Mask>1</Use_Mask>
 	</SensorBox>
 	<Blobs>
-		<AreaMax>39</AreaMax>
-		<AreaMinStp1>11</AreaMinStp1>
+		<AreaMax>94</AreaMax>
+		<AreaMinStp1>17</AreaMinStp1>
 		<AreaMinStp2>8</AreaMinStp2>
 		<MaxBlobs>29</MaxBlobs>
 	</Blobs>

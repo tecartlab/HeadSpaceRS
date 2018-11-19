@@ -33,7 +33,7 @@ void TrackingNetworkManager::setup(ofxGui &gui, string _kinectSerial){
     
     panel->loadTheme("theme/theme_light.json");
     panel->setName("Broadcasting..");
-	panel->add<ofxGuiIntInputField>(kinectServerID.set("ServerID", 0, 0, 10));
+	panel->add<ofxGuiIntInputField>(mServerID.set("ServerID", 0, 0, 10));
 
     streamingBodyBlob.addListener(this, &TrackingNetworkManager::listenerBool);
     streamingHeadBlob.addListener(this, &TrackingNetworkManager::listenerBool);
@@ -45,21 +45,21 @@ void TrackingNetworkManager::setup(ofxGui &gui, string _kinectSerial){
     listeningIP.addListener(this, &TrackingNetworkManager::listenerString);
     listeningPort.addListener(this, &TrackingNetworkManager::listenerInt);
     
-    broadcastGroup = panel->addGroup("Broadcast");
+    broadcastGroup = panel->addGroup("Broadcast TX");
     //panel->add(broadcastLabel.set("Broadcast"));
-    broadcastGroup->add<ofxGuiTextField>(broadcastIP.set("IP","127.0.0.1"));
-    broadcastGroup->add<ofxGuiIntInputField>(broadcastPort.set("Port", NETWORK_BROADCAST_PORT, NETWORK_BROADCAST_PORT, NETWORK_BROADCAST_PORT + 99));
+    broadcastGroup->add<ofxGuiTextField>(broadcastIP.set("TX IP","127.0.0.1"));
+    broadcastGroup->add<ofxGuiIntInputField>(broadcastPort.set("TX Port", NETWORK_BROADCAST_PORT, NETWORK_BROADCAST_PORT, NETWORK_BROADCAST_PORT + 99));
     
-    listeningGroup = panel->addGroup("Listening");
-    listeningGroup->add<ofxGuiTextField>(listeningIP.set("IP",localAddress));
-    listeningGroup->add<ofxGuiIntInputField>(listeningPort.set("Port", NETWORK_LISTENING_PORT, NETWORK_LISTENING_PORT, NETWORK_LISTENING_PORT + 99));
+    listeningGroup = panel->addGroup("Listening RX");
+    listeningGroup->add<ofxGuiTextField>(listeningIP.set("RX IP",localAddress));
+    listeningGroup->add<ofxGuiIntInputField>(listeningPort.set("RX Port", NETWORK_LISTENING_PORT, NETWORK_LISTENING_PORT, NETWORK_LISTENING_PORT + 99));
 
     
     streamingGuiGroup.setName("Streaming");
-    streamingGuiGroup.add(streamingBodyBlob.set("bodyBlob", true));
+    //streamingGuiGroup.add(streamingBodyBlob.set("bodyBlob", true));
     streamingGuiGroup.add(streamingHeadBlob.set("headBlob", true));
-    streamingGuiGroup.add(streamingHead.set("head", true));
-    streamingGuiGroup.add(streamingEye.set("eye", true));
+    //streamingGuiGroup.add(streamingHead.set("head", true));
+    //streamingGuiGroup.add(streamingEye.set("eye", true));
     panel->addGroup(streamingGuiGroup);
 
     panel->loadFromFile("broadcast.xml");
@@ -168,7 +168,7 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
     // send frame number
     ofxOscMessage frame;
     frame.setAddress("/ks/server/track/frame/start");
-    frame.addIntArg(mServerID);
+    frame.addIntArg(mServerID.get());
     frame.addIntArg(frameNumber);
     frame.addIntArg(streamingBodyBlob.get());
     frame.addIntArg(streamingHeadBlob.get());
@@ -181,43 +181,43 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
 			if (streamingHeadBlob.get()) {
 				ofxOscMessage headBlob;
 				headBlob.setAddress("/ks/server/track/headblob");
-				headBlob.addIntArg(mServerID);
+				headBlob.addIntArg(mServerID.get());
 				headBlob.addIntArg(frameNumber);
 				headBlob.addIntArg(_blobFinder.blobEvents[i].mID);
 				headBlob.addIntArg(_blobFinder.blobEvents[i].sortPos);
 				headBlob.addIntArg(_blobFinder.blobEvents[i].getAgeInMillis());
-				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobCenter.x * scale);
-				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobCenter.y * scale);
-				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobCenter.z * scale);
-				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobSize.x * scale);
-				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobSize.y * scale);
+				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobCenter.x);
+				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobCenter.y);
+				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobCenter.z);
+				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobSize.x);
+				headBlob.addFloatArg(_blobFinder.blobEvents[i].headBlobSize.y);
 
 				sendMessageToTrackingClients(headBlob);
 			}
 			if (streamingHead.get()) {
 				ofxOscMessage head;
 				head.setAddress("/ks/server/track/head");
-				head.addIntArg(mServerID);
+				head.addIntArg(mServerID.get());
 				head.addIntArg(frameNumber);
 				head.addIntArg(_blobFinder.blobEvents[i].mID);
 				head.addIntArg(_blobFinder.blobEvents[i].sortPos);
 				head.addIntArg(_blobFinder.blobEvents[i].getAgeInMillis());
-				head.addFloatArg(_blobFinder.blobEvents[i].headTop.x * scale);
-				head.addFloatArg(_blobFinder.blobEvents[i].headTop.y * scale);
-				head.addFloatArg(_blobFinder.blobEvents[i].headTop.z * scale);
+				head.addFloatArg(_blobFinder.blobEvents[i].headTop.x);
+				head.addFloatArg(_blobFinder.blobEvents[i].headTop.y);
+				head.addFloatArg(_blobFinder.blobEvents[i].headTop.z);
 
 				sendMessageToTrackingClients(head);
 			}
 			if (streamingEye.get()) {
 				ofxOscMessage eye;
 				eye.setAddress("/ks/server/track/eye");
-				eye.addIntArg(mServerID);
+				eye.addIntArg(mServerID.get());
 				eye.addIntArg(_blobFinder.blobEvents[i].mID);
 				eye.addIntArg(_blobFinder.blobEvents[i].sortPos);
 				eye.addIntArg(_blobFinder.blobEvents[i].getAgeInMillis());
-				eye.addFloatArg(_blobFinder.blobEvents[i].eyeCenter.x * scale);
-				eye.addFloatArg(_blobFinder.blobEvents[i].eyeCenter.y * scale);
-				eye.addFloatArg(_blobFinder.blobEvents[i].eyeCenter.z * scale);
+				eye.addFloatArg(_blobFinder.blobEvents[i].eyeCenter.x);
+				eye.addFloatArg(_blobFinder.blobEvents[i].eyeCenter.y);
+				eye.addFloatArg(_blobFinder.blobEvents[i].eyeCenter.z);
 				eye.addFloatArg(_blobFinder.blobEvents[i].eyeGaze.x);
 				eye.addFloatArg(_blobFinder.blobEvents[i].eyeGaze.y);
 				eye.addFloatArg(_blobFinder.blobEvents[i].eyeGaze.z);
@@ -225,21 +225,22 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
 				sendMessageToTrackingClients(eye);
 			}
 		}
-		else if (_blobFinder.blobEvents[i].isDying()) {
+		else if (!_blobFinder.blobEvents[i].isDead() && _blobFinder.blobEvents[i].isDying()) {
 			ofxOscMessage bodyBlob;
 			bodyBlob.setAddress("/ks/server/track/end");
-			bodyBlob.addIntArg(mServerID);
+			bodyBlob.addIntArg(mServerID.get());
 			bodyBlob.addIntArg(frameNumber);
 			bodyBlob.addIntArg(_blobFinder.blobEvents[i].mID);
 			bodyBlob.addIntArg(_blobFinder.blobEvents[i].getAgeInMillis());
 
 			sendMessageToTrackingClients(bodyBlob);
+			_blobFinder.blobEvents[i].mIsDead = true;
 		}
     }
 	// send frame number
 	ofxOscMessage framedone;
 	framedone.setAddress("/ks/server/track/frame/end");
-	framedone.addIntArg(mServerID);
+	framedone.addIntArg(mServerID.get());
 	framedone.addIntArg(frameNumber);
 	sendMessageToTrackingClients(framedone);
 }
@@ -247,13 +248,13 @@ void TrackingNetworkManager::sendTrackingData(BlobFinder & _blobFinder){
 void TrackingNetworkManager::sendCalibFrustum(Frustum & _frustum, string _ip, int _port){
     ofxOscMessage frustum;
     frustum.setAddress("/ks/server/calib/frustum");
-    frustum.addIntArg(mServerID);
-    frustum.addFloatArg(_frustum.left * scale);
-    frustum.addFloatArg(_frustum.right * scale);
-    frustum.addFloatArg(_frustum.bottom * scale);
-    frustum.addFloatArg(_frustum.top * scale);
-    frustum.addFloatArg(_frustum.near1 * scale);
-    frustum.addFloatArg(_frustum.far1 * scale);
+    frustum.addIntArg(mServerID.get());
+    frustum.addFloatArg(_frustum.left);
+    frustum.addFloatArg(_frustum.right);
+    frustum.addFloatArg(_frustum.bottom);
+    frustum.addFloatArg(_frustum.top);
+    frustum.addFloatArg(_frustum.near1);
+    frustum.addFloatArg(_frustum.far1);
     
     broadcastSender.setup(_ip, _port);
     broadcastSender.sendMessage(frustum);
@@ -262,7 +263,7 @@ void TrackingNetworkManager::sendCalibFrustum(Frustum & _frustum, string _ip, in
 void TrackingNetworkManager::sendCalibTrans(ofMatrix4x4 & _trans, string _ip, int _port){
     ofxOscMessage trans;
     trans.setAddress("/ks/server/calib/trans");
-    trans.addIntArg(mServerID);
+    trans.addIntArg(mServerID.get());
 	trans.addFloatArg(_trans._mat[0].x);
 	trans.addFloatArg(_trans._mat[0].y);
 	trans.addFloatArg(_trans._mat[0].z);
@@ -287,7 +288,7 @@ void TrackingNetworkManager::sendCalibTrans(ofMatrix4x4 & _trans, string _ip, in
 void TrackingNetworkManager::sendCalibSensorBox(BlobFinder & _blobFinder, string _ip, int _port){
     ofxOscMessage sensorbox;
     sensorbox.setAddress("/ks/server/calib/sensorbox");
-    sensorbox.addIntArg(mServerID);
+    sensorbox.addIntArg(mServerID.get());
     sensorbox.addFloatArg(_blobFinder.sensorBoxLeft.get() * scale);
     sensorbox.addFloatArg(_blobFinder.sensorBoxRight.get() * scale);
     sensorbox.addFloatArg(_blobFinder.sensorBoxBottom.get() * scale);
@@ -302,10 +303,10 @@ void TrackingNetworkManager::sendCalibSensorBox(BlobFinder & _blobFinder, string
 void TrackingNetworkManager::sendGazePoint(BlobFinder & _blobFinder, string _ip, int _port){
     ofxOscMessage sensorbox;
     sensorbox.setAddress("/ks/server/calib/gazepoint");
-    sensorbox.addIntArg(mServerID);
-    sensorbox.addFloatArg(_blobFinder.gazePoint.get().x * scale);
-    sensorbox.addFloatArg(_blobFinder.gazePoint.get().y * scale);
-    sensorbox.addFloatArg(_blobFinder.gazePoint.get().z * scale);
+    sensorbox.addIntArg(mServerID.get());
+    sensorbox.addFloatArg(_blobFinder.gazePoint.get().x);
+    sensorbox.addFloatArg(_blobFinder.gazePoint.get().y);
+    sensorbox.addFloatArg(_blobFinder.gazePoint.get().z);
     
     broadcastSender.setup(_ip, _port);
     broadcastSender.sendMessage(sensorbox);
@@ -344,7 +345,7 @@ void TrackingNetworkManager::sendBroadCastAddress(){
     ofxOscMessage broadcast;
     broadcast.setAddress("/ks/server/broadcast");
 	broadcast.addStringArg(mDeviceSerial);
-	broadcast.addIntArg(mServerID);
+	broadcast.addIntArg(mServerID.get());
 	broadcast.addStringArg(listeningIP.get());
 	broadcast.addIntArg(listeningPort.get());
     

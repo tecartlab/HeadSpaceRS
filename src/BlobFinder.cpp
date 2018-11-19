@@ -396,7 +396,7 @@ void BlobFinder::update(){
 			//calculate the blob size in worldspace
 			ofVec2f blobSize = ofVec2f(((float)bounds.getWidth() / captureScreenSize.x) * sensorFieldWidth, ((float)bounds.getHeight() / captureScreenSize.y) * sensorFieldDepth);
 
-			ofLogVerbose("Updating old event with ID: " + ofToString(blobEvents[matchEventID].mID));
+			//ofLogVerbose("Updating old event with ID: " + ofToString(blobEvents[matchEventID].mID));
 
 			blobEvents[matchEventID].update(bounds, blobPos, blobSize, headTop, smoothFactor.get());
 			detectedHeads[matchBlobID].hasBeenTaken = true;
@@ -417,7 +417,7 @@ void BlobFinder::update(){
 			//calculate the blob size in worldspace
 			ofVec2f blobSize = ofVec2f(((float)bounds.getWidth() / captureScreenSize.x) * sensorFieldWidth, ((float)bounds.getHeight() / captureScreenSize.y) * sensorFieldDepth);
 
-			ofLogVerbose("Creating new event with ID: " + ofToString(minID));
+			//ofLogVerbose("Creating new event with ID: " + ofToString(minID));
 
 			blobEvents.push_back(BlobTracker(minID++, eventBreathSize.get(), bounds, blobPos, blobSize, headTop));
 		}
@@ -554,7 +554,7 @@ void BlobFinder::update(){
 
     //updates all alive blobs and removes all the blobs that havent had an update for a specific number of frames or have been killed
     for(int e = blobEvents.size() - 1; e >= 0; e--){
-        if(blobEvents[e].checkForDisposal()){
+        if(blobEvents[e].isDead()){
 			blobEvents.erase(blobEvents.begin() + e);
         }
     }

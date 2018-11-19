@@ -19,6 +19,7 @@ void ofApp::setup(){
 	}
 #endif
 
+	ofLog(OF_LOG_NOTICE, "MainAPP: looking for RealSense Device...");
 
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
@@ -26,7 +27,11 @@ void ofApp::setup(){
 
 	realSense->checkConnectedDialog();
 
+	realSense->hardwareReset();
+
 	realSense->setVideoSize(REALSENSE_VIDEO_WIDTH, REALSENSE_VIDEO_HEIGHT);
+
+	ofLog(OF_LOG_NOTICE, "... RealSense Device found.");
 
 	// we don't want to be running to fast
 	//ofSetVerticalSync(true);
@@ -61,12 +66,14 @@ void ofApp::setup(){
 	////////////////////
 	//  BLOBFINDER    //
 	////////////////////
+	ofLog(OF_LOG_NOTICE, "MainAPP: setting up blobfinder");
 
 	blobFinder.setup(gui);
 
 	/////////////////////////////
 	//   REALSENSE GUI   SETUP //
 	/////////////////////////////
+	ofLog(OF_LOG_NOTICE, "MainAPP: loading postprocessing GUI");
 
 	post = gui.addPanel();
 	post->loadTheme("theme/theme_light.json");
@@ -90,7 +97,8 @@ void ofApp::setup(){
     /////////////////////////////
     //CALIBRATION GUI   SETUP //
     ////////////////////////////
-    
+	ofLog(OF_LOG_NOTICE, "MainAPP: loading calibration settings");
+
     setupCalib = gui.addPanel();
     
     setupCalib->loadTheme("theme/theme_light.json");
@@ -117,6 +125,7 @@ void ofApp::setup(){
 	////////////////////////////
 	//   GUI   Transfromation //
 	////////////////////////////
+	ofLog(OF_LOG_NOTICE, "MainAPP: loading transformation matrix");
 
 	guitransform = gui.addPanel();
 
@@ -139,6 +148,8 @@ void ofApp::setup(){
 	/////////////////////////////
 	//   GUI   DEVICE PARAMS   //
 	/////////////////////////////
+
+	ofLog(OF_LOG_NOTICE, "MainAPP: loading Device Operation GUI");
 
 	device = gui.addPanel();
 
@@ -165,18 +176,26 @@ void ofApp::setup(){
     ////////////////////////
     //    RealSense       // 
     ////////////////////////
-    
+
+	ofLog(OF_LOG_NOTICE, "MainAPP: starting attached Device...");
+
 	// firing up the device, creating the GUI and loading the device parameters
 	if (realSense->capture()) {
 		createGUIDeviceParams();
 	}
-     
+
+	ofLog(OF_LOG_NOTICE, "...starting attached Device done.");
+
     /////////////////
 	// creating preview point cloud is bogging the system down, so switched off at startup
 	bPreviewPointCloud = false;
     
-    networkMng.setup(gui, realSense->getSerialNumber(-1));
-    
+	ofLog(OF_LOG_NOTICE, "MainAPP: setting up networking...");
+	
+	networkMng.setup(gui, realSense->getSerialNumber(-1));
+
+	ofLog(OF_LOG_NOTICE, "...networking done.");
+
     int * val = 0;
     updateFrustumCone(*val);
  
@@ -527,11 +546,11 @@ void ofApp::update(){
 			// BlobFinding on the captured FBO
 			/////////////////////////////////////
 			blobFinder.update();
+
+			networkMng.update(blobFinder, realSenseFrustum, transformation.get());
 		}
     
 	}
-    
-    networkMng.update(blobFinder, realSenseFrustum, transformation.get());
 }
 
 //--------------------------------------------------------------

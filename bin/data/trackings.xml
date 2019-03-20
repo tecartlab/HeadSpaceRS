@@ -7,11 +7,11 @@
 		<sensorFboSize>2</sensorFboSize>
 	</Quality>
 	<SensorBox>
-		<left>5800</left>
-		<right>-300</right>
-		<front>3200</front>
-		<back>-3200</back>
-		<top>1800</top>
+		<left>500</left>
+		<right>-500</right>
+		<front>1000</front>
+		<back>0</back>
+		<top>1000</top>
 		<bottom>300</bottom>
 		<Use_Mask>1</Use_Mask>
 	</SensorBox>

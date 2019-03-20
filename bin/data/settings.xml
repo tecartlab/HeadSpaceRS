@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <Calibration_Panel>
 	<use_video>1</use_video>
-	<Grain>3</Grain>
-	<calibrationPoint_X>483, 243</calibrationPoint_X>
-	<calibrationPoint_Y>140, 256</calibrationPoint_Y>
-	<calibrationPoint_Z>341, 326</calibrationPoint_Z>
+	<Grain>6</Grain>
+	<calibrationPoint_X>399, 304</calibrationPoint_X>
+	<calibrationPoint_Y>374, 250</calibrationPoint_Y>
+	<calibrationPoint_Z>347, 280</calibrationPoint_Z>
 	<frustumField>
 		<nearFrustum>400</nearFrustum>
 		<farFrustum>4000</farFrustum>

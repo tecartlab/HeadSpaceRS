@@ -27,7 +27,7 @@ void ofApp::setup(){
 
 	realSense->checkConnectedDialog();
 
-	realSense->hardwareReset();
+	//realSense->hardwareReset();
 
 	realSense->setVideoSize(REALSENSE_VIDEO_WIDTH, REALSENSE_VIDEO_HEIGHT);
 

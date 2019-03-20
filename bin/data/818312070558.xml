@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<RealSense_Device>
+	<Settings>
+		<use_laser_projector>1</use_laser_projector>
+		<laser_power>0.5</laser_power>
+		<use_auto_exposure>1</use_auto_exposure>
+		<manual_exposure>8500</manual_exposure>
+		<image_gain>16</image_gain>
+		<frame_queue_size>16</frame_queue_size>
+	</Settings>
+</RealSense_Device>

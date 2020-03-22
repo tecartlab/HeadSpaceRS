@@ -8,3 +8,9 @@ bin/HeadSpaceRS.ipdb
 bin/HeadSpaceRS.iobj
 *.bag
 bin/DLLS/
+bin/fmodex64.dll
+bin/fmodexL64.dll
+bin/FreeImage.dll
+bin/HeadSpaceRS*.*
+HeadSpaceRS.vcxproj.user
+icon.aps

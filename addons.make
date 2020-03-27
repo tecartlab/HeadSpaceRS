@@ -2,4 +2,4 @@ ofxGuiExtended
 ofxNetwork
 ofxOpenCv
 ofxOsc
-ofxRSSDK
+ofxRealSenseTwo

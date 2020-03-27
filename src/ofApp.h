@@ -11,7 +11,7 @@
 #include "Frustum.h"
 #include "CaptureMeshArray.h"
 
-#include "ofxRSSDKv2.h"
+#include "ofxRealSenseTwo.h"
 #include <librealsense2/rs.hpp> // Include RealSense Cross Platform API 
 
 #include <ofMatrix4x4.h>
@@ -31,7 +31,7 @@
 #define N_MEASURMENT_CYCLES 10
 
 using namespace std;
-using namespace ofxRSSDK;
+using namespace ofxRealSenseTwo;
 
 //helpfull links during development:
 // https://github.com/openframeworks/openFrameworks/issues/3817

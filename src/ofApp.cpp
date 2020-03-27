@@ -519,7 +519,7 @@ void ofApp::update(){
 	ofBackground(100, 100, 100);
     	
 	// there is a new frame and we are connected
-	if(realSense->update(ofxRSSDK::PointCloud::INFRALEFT)) {
+	if(realSense->update(ofxRealSenseTwo::PointCloud::INFRALEFT)) {
 
         if(bUpdateMeasurment){
             measurementCycleRaw();

@@ -56,7 +56,7 @@ public:
     
     string getOscMsgAsString(ofxOscMessage m);
  
-	vector<string> TrackingNetworkManager::matchesInRegex(string _str, string _reg);
+	vector<string> matchesInRegex(string _str, string _reg);
 
     vector<string>  localIpAddresses;
     
